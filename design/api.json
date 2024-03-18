@@ -1,0 +1,284 @@
+{
+    "requirement" : {
+        "1" : "Có hệ thống xác thực (login/sign up/reset password)",
+        "2" : "Dịch dạng chữ",
+        "3" : "Dịch nội dung hình ảnh",
+        "4" : "Dịch văn bản (txt,doc,pdf)",
+        "5" : "Dịch nội dung trong trang web",
+        "6" : "Lưu các bản dịch trước ( dịch chữ )",
+        "7" : "Lưu các bản dịch người dùng đánh dấu"
+    },
+    "entry" : {
+        "url" : "/",
+        "method" : "GET",
+        "headers" : "None",
+
+        "success" : {
+            "status-code" : "200",
+            "content-type" : "text/html",
+            "text" : "Nội dung của file html"
+        },
+
+        "failed" : {
+            "status-code" : "500"
+        },
+
+        "Mô tả" : "Gửi request yêu cầu trang index.html"
+    },
+    "request_resouce" : {
+        "url" : "/public/<input_url>",
+        "method" : "GET",
+        "headers" : "None",
+        
+        "success" : {
+            "Chú thích" : "Request mặc định của client/broswer"
+        },
+
+        "failed" : {
+            "status-code" : "401 hoặc 500"
+        },
+
+        "Mô tả" : "Cơ chế tự động request của client/broswer khi đặt/đổi url của resource ví dự như <img>, <source>, ... "
+    },
+    "login" : {
+        "url" : "/authentication/login",
+        "method" : "POST",
+        "headers" : "None",
+        "body" : {
+            "username" : "<input>",
+            "password" : "<input>",
+            "previous_translation" : [
+                {
+                    "from_language" : "<response>",
+                    "to_language" : "<response>",
+                    "from_content" : "<response>",
+                    "to_content" : "<response>"
+                }
+            ]
+        },
+
+        "success" : {
+            "status-code" : "200",
+            "headers" : {
+                "Set-cookie" : "session_id=<input>"
+            }
+        },
+        "failed" : {
+            "status-code" : "400 hoặc 500"
+        },
+
+        "Mô tả" : "Gửi yêu cầu đăng nhập, cần xử lý xác minh username,password và email hợp lệ bên client.Header sẽ tự set cookie, không cần cài đặt bên client",
+        "Chú thích" : "(Tính năng nâng cao : previous_translation).Client cần lưu bản dịch trước đó nếu muốn lưu vào database thêm (đồng bộ) vào database khi đăng nhập"
+    },
+
+    "register" : {
+        "url" : "/authentication/register",
+        "method" : "POST",
+        "headers" : "None",
+        "body" : {
+            "username" : "<input>",
+            "password" : "<input>",
+            "email" : "<input>"
+        },
+
+        "success" : {
+            "status-code" : "200",
+            "headers" : {
+                "Set-cookie" : "session_id=<input>"
+            }
+        },
+        "failed" : {
+            "status-code" : "400 hoặc 500",
+            "text" : "Người dùng tồn tại hoặc lỗi"
+        },
+
+        "Mô tả" : "Gửi yêu cầu đăng ký, cần xử lý xác minh username,password và email hợp lệ bên client."
+    },
+
+    "request_history" : {
+        "url" : "/utility/history",
+        "method" : "POST",
+        "headers" : "None",
+        "body" : {
+            "current_it" : "<int_input>",
+            "amount" : "<int_input>"
+        },
+
+        "success" : {
+            "status-code" : "200",
+            "json" : [
+                {
+                    "from_language" : "<response>",
+                    "to_language" : "<response>",
+                    "from_content" : "<response>",
+                    "to_content" : "<response>"
+                },
+                {
+                    "from_language" : "<response>",
+                    "to_language" : "<response>",
+                    "from_content" : "<response>",
+                    "to_content" : "<response>"
+                }
+            ]
+        },
+        "failed" : {
+            "status-code" : "404 hoặc 500"
+        },
+
+        "Mô tả" : "Gửi yêu cầu xem lịch sử về server",
+        "Chú thích" : "current_it là bản ghi lâu nhất hiện tại (0 khi chưa xem) và amount là số lượng tối ta cần lấy. Khi chưa có lịch sử thì sẽ trả về succes và chứa mảng rỗng"
+    },
+    "request_saved" : {
+        "url" : "/utility/saved",
+        "method" : "POST",
+        "headers" : "None",
+        "body" : {
+            "current_it" : "<int_input>",
+            "amount" : "<int_input>"
+        },
+        "success" : {
+            "status-code" : "200",
+            "json" : [
+                {
+                    "from_language" : "<response>",
+                    "to_language" : "<response>",
+                    "from_content" : "<response>",
+                    "to_content" : "<response>"
+                },
+                {
+                    "from_language" : "<response>",
+                    "to_language" : "<response>",
+                    "from_content" : "<response>",
+                    "to_content" : "<response>"
+                }
+            ]
+        },
+        "failed" : {
+            "status-code" : "401,404 hoặc 500"
+        },
+        "Mô tả" : "Gửi yêu cầu xem những bản dịch đã lưu về server",
+        "Chú thích" : "current_it là bản ghi lâu nhất hiện tại (0 khi chưa xem) và amount là số lượng tối ta cần lấy. tại chỉ hỗ trợ xem theo thứ tự thời gian, cần lưu ý khi cài đặt sẽ có thể có thêm xem theo tìm kiếm, xem theo ngôn ngữ"
+    },
+    "request_save" : {
+        "url" : "/utility/save",
+        "method" : "POST",
+        "headers" : "None",
+        "body" : {
+            "current_it" : "<int_input>",
+            "amount" : "<int_input>"
+        },
+
+        "success" : {
+            "status-code" : "200"
+        },
+
+        "failed" : {
+            "status-code" : "400 hoặc 500"
+        },
+        "Mô tả" : "Gửi yêu cầu lưu bản ghi"
+    },
+    "request_text_translation" : {
+        "url" : "/translate/text",
+        "method" : "POST",
+        "headers" : "None",
+        "body" : {
+            "from_language" : "<input>",
+            "to_language" : "<input>",
+            "content" : "<input>"
+        },
+
+        "success" : {
+            "status-code" : "200",
+            "headers" : "None",
+            "content-type" : "text/plain",
+            "body" : {
+                "text" : "<response>"
+            }
+        },
+
+        "failed" : {
+            "status-code" : "500"
+        },
+
+        "Mô tả" : "Gửi yêu cầu dịch về server",
+        "Chú thích" : "Các yêu cầu dưới tương tự yêu cầu này chỉ khác url và content."
+    },
+
+    "request_image_translation" : {
+        "url" : "/translate/img",
+        "method" : "POST",
+        "headers" : "None",
+        "body" : {
+            "from_language" : "<input>",
+            "to_language" : "<input>",
+            "content" : "<blob_input>" 
+        },
+
+        "success" : {
+            "status-code" : "200",
+            "headers" : "None",
+            "content-type" : "text/plain",
+            "body" : {
+                "text" : "<response>"
+            }
+        },
+
+        "failed" : {
+            "status-code" : "500"
+        },
+
+        "Mô tả" : "Gửi yêu cầu dịch về server"
+    },
+
+    "request_document_translation" : {
+        "url" : "/translate/doc",
+        "method" : "POST",
+        "headers" : "None",
+        "body" : {
+            "from_language" : "<input>",
+            "to_language" : "<input>",
+            "content" : "<blob_input>" 
+        },
+
+        "success" : {
+            "status-code" : "200",
+            "headers" : "None",
+            "content-type" : "text/plain",
+            "body" : {
+                "text" : "<response>"
+            }
+        },
+
+        "failed" : {
+            "status-code" : "500"
+        },
+
+        "Mô tả" : "Gửi yêu cầu dịch về server"
+    },
+
+    "request_website_translation" : {
+        "url" : "/translate/web",
+        "method" : "POST",
+        "headers" : "None",
+        "body" : {
+            "from_language" : "<input>",
+            "to_language" : "<input>",
+            "content" : "<url_input>" 
+        },
+
+        "success" : {
+            "status-code" : "200",
+            "headers" : "None",
+            "content-type" : "text/plain",
+            "body" : {
+                "text" : "<response>"
+            }
+        },
+
+        "failed" : {
+            "status-code" : "500"
+        },
+
+        "Mô tả" : "Gửi yêu cầu dịch về server"
+    }
+}
