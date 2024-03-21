@@ -35,7 +35,7 @@
         },
 
         "failed" : {
-            "status-code" : "401 hoặc 500"
+            "status-code" : "404 hoặc 500"
         },
 
         "Mô tả" : "Cơ chế tự động request của client/broswer khi đặt/đổi url của resource ví dự như <img>, <source>, ... "
@@ -46,15 +46,7 @@
         "headers" : "None",
         "body" : {
             "username" : "<input>",
-            "password" : "<input>",
-            "previous_translation" : [
-                {
-                    "from_language" : "<response>",
-                    "to_language" : "<response>",
-                    "from_content" : "<response>",
-                    "to_content" : "<response>"
-                }
-            ]
+            "password" : "<input>"
         },
 
         "success" : {
@@ -95,6 +87,8 @@
         "Mô tả" : "Gửi yêu cầu đăng ký, cần xử lý xác minh username,password và email hợp lệ bên client."
     },
 
+    "reset_password" : "Chưa nghĩ ra, để sau vậy",
+    
     "request_history" : {
         "url" : "/utility/history",
         "method" : "POST",
