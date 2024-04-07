@@ -7,7 +7,7 @@ from backend.controller import routes
 
 app = web.Application()
 app.add_routes(routes)
-def start(port : str = '8080'):
+def start(port : int = 8080):
     """Khởi động sever
 
     Args:
