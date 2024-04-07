@@ -228,9 +228,9 @@ class Model:
         Returns:
             str: Kết quả
         """
-        from_language = content('from_language')
-        to_language = content('to_language')
-        from_content = content('fom_content')
+        from_language = content['from_language']
+        to_language = content['to_language']
+        from_content = content['content']
         to_content = self.translator.translate(from_language,to_language,from_content)
         content = {
             'from_language' : from_language,

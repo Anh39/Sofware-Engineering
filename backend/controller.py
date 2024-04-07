@@ -8,14 +8,11 @@ from backend.model import Model
 from backend.model import Type
 
 public = folder_path.frontend.public
+frontend_files = folder_path.util.get_tree(folder_path.frontend.path)
 
-mapping = {
-    'index.html' : public.index,
-    'style.css' : public.style,
-    'client.js' : public.client,
-    'favicon.ico' : public.favicon
-}
-
+for key in frontend_files:
+    if ("index.html" in key):
+        index_file = frontend_files[key]
 
 routes = web.RouteTableDef()
 no_cache = {'Cache-Control':'no-cache'}
@@ -24,23 +21,23 @@ no_cache = {'Cache-Control':'no-cache'}
 async def entry(request : web.Request):
     try:
         session_id = Model.add_guest()
-        response = web.FileResponse(path=mapping['index.html'],status=200)
+        response = web.FileResponse(path=index_file,status=200)
         response.set_cookie('uuid',session_id)
         return response
     except:
         return web.Response(text='Server error',status=500)
 
-@routes.get('/{name}')
-async def request_resource(request : web.Request):
-    name = request.match_info['name']
-    try:
-        session_id = request.cookies.get('uuid')
-        if (Model.guest_validate(session_id)):
-            return web.FileResponse(path=mapping[name],status=200)
-        return web.Response(text='Server error',status=500)
-    except:
-        return web.Response(text='Resource not found',status=404)
-    
+# @routes.get('/{name}')
+# async def request_resource(request : web.Request):
+#     name = request.match_info['name']
+#     try:
+#         session_id = request.cookies.get('uuid')
+#         if (Model.guest_validate(session_id)):
+#             return web.FileResponse(path=mapping[name],status=200)
+#         return web.Response(text='Server error',status=500)
+#     except:
+#         return web.Response(text='Resource not found',status=404)
+
 @routes.post('/authentication/{kind}')
 async def authentication(request : web.Request):
     kind = request.match_info['kind']
@@ -92,9 +89,16 @@ async def utility(request : web.Request):
 async def translate(request : web.Request):
     session_id = request.cookies.get('uuid')
     kind = request.match_info['kind']
-    if (Model.guest_validate(session_id)):
+    if (Model.guest_validate(session_id) or True):
         if (kind == 'text'):
             content = await request.json()
             result = Model.translate_text(session_id,content)
-            return web.Response(text=result,content_type=Type.plain,status=200)
+            return web.Response(text=result,status=200)
     return web.Response(text='Method not implemented',status=500)
+
+@routes.get('/{tail:.*}')
+async def request_resoure(request : web.Request):
+    path = os.path.normpath(request.match_info['tail'])
+    if (path in frontend_files):
+        return web.FileResponse(path=frontend_files[path],status=200)
+    return web.Response(text='File not found',status=404)

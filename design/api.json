@@ -26,7 +26,7 @@
         "Mô tả" : "Gửi request yêu cầu trang index.html"
     },
     "request_resouce" : {
-        "url" : "/public/<input_url>",
+        "url" : "/<input_url>",
         "method" : "GET",
         "headers" : "None",
         
@@ -38,7 +38,8 @@
             "status-code" : "404 hoặc 500"
         },
 
-        "Mô tả" : "Cơ chế tự động request của client/broswer khi đặt/đổi url của resource ví dự như <img>, <source>, ... "
+        "Mô tả" : "Cơ chế tự động request của client/broswer khi đặt/đổi url của resource ví dự như <img>, <source>, ... ",
+        "Chú thích" : "Chỉ lấy các file trong thư mục frontend và đúng theo đường dẫn ví dụ index.html , css/base.css"
     },
     "login" : {
         "url" : "/authentication/login",
