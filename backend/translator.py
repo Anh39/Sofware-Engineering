@@ -1,15 +1,13 @@
 from enum import Enum
+from backend.translate_backend.translate_lib_api import Handler
+from backend.lib import Language
 
-class Language(Enum):
-    """Lớp Enum chứa các loại ngôn ngữ khả dụng
-    """
-    English = 'English'
-    Vietnamese = 'Vietnamese'
 
 class Translator:
     """Lớp xử lý việc dịch
 
     """
+    backend = Handler()
     lang_map = {
         'EN' : Language.English,
         'VN' : Language.Vietnamese,
@@ -35,4 +33,5 @@ class Translator:
         """
         from_language = self.lang_map[from_language]
         to_language = self.lang_map[to_language]
-        return input_text+'translated'
+        result = self.backend.translate(from_language,to_language,text=input_text)
+        return result

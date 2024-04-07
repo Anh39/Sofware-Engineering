@@ -89,11 +89,11 @@ async def utility(request : web.Request):
 async def translate(request : web.Request):
     session_id = request.cookies.get('uuid')
     kind = request.match_info['kind']
-    if (Model.guest_validate(session_id)):
+    if (Model.guest_validate(session_id) or True):
         if (kind == 'text'):
             content = await request.json()
             result = Model.translate_text(session_id,content)
-            return web.Response(text=result,content_type=Type.plain,status=200)
+            return web.Response(text=result,status=200)
     return web.Response(text='Method not implemented',status=500)
 
 @routes.get('/{tail:.*}')

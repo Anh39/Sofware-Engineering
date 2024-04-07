@@ -9,7 +9,7 @@ Thành viên nhóm:
 ### Cơ bản :
 - Giao diện web
 - Dịch chữ từ tiếng Anh sang tiếng Việt và ngược lại
-- Luư lịch sử dịch
+- Lưu lịch sử dịch
 - Có hệ thống tài khoản người dùng
 - Người dùng có thể luư lại một số bản dịch
 ### Nâng cao :
@@ -21,7 +21,7 @@ Thành viên nhóm:
 - Cho phép người dùng sử dụng từ điển riêng
 - Cho phép người dùng sử dụng backend dịch khác như Google Translate, DeepL, ChatGPT, Gemini, ....
 ## Công nghệ sử dụng:
-- Backend : python [aiohttp](https://docs.aiohttp.org/en/stable/ )
+- Backend : python [aiohttp](https://docs.aiohttp.org/en/stable/ ), (tạm thời [translate](https://pypi.org/project/translate/))
 - Frontend
 - Database
 ## Đóng góp:

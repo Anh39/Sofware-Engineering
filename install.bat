@@ -5,3 +5,4 @@ pip install asyncio
 pip install json
 pip install uuid
 pip install typing
+pip install translate
