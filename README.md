@@ -8,10 +8,10 @@ Thành viên nhóm:
 ## Tính năng :
 ### Cơ bản :
 - Giao diện web
-- Dịch chữ từ tiếng Anh sang tiếng Việt và ngược lại
+- Dịch chữ từ nhiều ngôn ngữ sang cho nhau và ngược lại
 - Lưu lịch sử dịch
 - Có hệ thống tài khoản người dùng
-- Người dùng có thể luư lại một số bản dịch
+- Người dùng có thể lưu lại một số bản dịch
 ### Nâng cao :
 - Hỗ trợ thêm nhiều ngôn ngữ hơn
 - Dịch tài liệu (docx,pdf,txt,json,csv)
