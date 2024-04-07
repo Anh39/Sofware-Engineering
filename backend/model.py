@@ -218,7 +218,7 @@ class Model:
         user : RegistedUser = self.users[identifier]
         return user.get_saved(from_it,amount)
     @classmethod
-    def translate_text(self,identifier : str,content : any) -> str:
+    async def translate_text(self,identifier : str,content : any) -> str:
         """Dịch nội dung chữ
 
         Args:
@@ -231,7 +231,7 @@ class Model:
         from_language = content['from_language']
         to_language = content['to_language']
         from_content = content['content']
-        to_content = self.translator.translate(from_language,to_language,from_content)
+        to_content = await self.translator.translate(from_language,to_language,from_content)
         content = {
             'from_language' : from_language,
             'to_language' : to_language,

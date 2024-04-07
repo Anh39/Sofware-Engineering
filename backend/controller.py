@@ -94,9 +94,10 @@ async def translate(request : web.Request):
     if (Model.guest_validate(session_id) or True):
         if (kind == 'text'):
             content = await request.json()
-            text_result = Model.translate_text(session_id,content)
+            text_result = await Model.translate_text(session_id,content)
             result = {
-                "text" : text_result
+                "text" : text_result,
+                "prompt" : content["content"]
             }
             end_time = time.time()
             print(f'Request process time : {end_time-start_time}')

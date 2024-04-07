@@ -30,7 +30,7 @@ class Translator:
     """
     backend = Handler()
     languages = Lang()
-    def translate(self,
+    async def translate(self,
                 from_language : str,
                 to_language : str,
                 input_text : str = '') -> str:
@@ -50,6 +50,6 @@ class Translator:
         if (from_language in self.languages.languages and to_language in self.languages.languages):
             from_language = self.languages.languages[from_language]
             to_language = self.languages.languages[to_language]
-            result = self.backend.translate(from_language,to_language,text=input_text)
+            result = await self.backend.concurent_translate(from_language,to_language,text=input_text)
             return result
         return "EROOR"
