@@ -6,6 +6,7 @@ import json
 from enum import Enum
 from backend.model import Model
 from backend.model import Type
+import time
 
 public = folder_path.frontend.public
 frontend_files = folder_path.util.get_tree(folder_path.frontend.path)
@@ -87,13 +88,19 @@ async def utility(request : web.Request):
 
 @routes.post('/translate/{kind}')
 async def translate(request : web.Request):
+    start_time = time.time()
     session_id = request.cookies.get('uuid')
     kind = request.match_info['kind']
     if (Model.guest_validate(session_id) or True):
         if (kind == 'text'):
             content = await request.json()
-            result = Model.translate_text(session_id,content)
-            return web.Response(text=result,status=200)
+            text_result = Model.translate_text(session_id,content)
+            result = {
+                "text" : text_result
+            }
+            end_time = time.time()
+            print(f'Request process time : {end_time-start_time}')
+            return web.Response(text=json.dumps(result),status=200)
     return web.Response(text='Method not implemented',status=500)
 
 @routes.get('/{tail:.*}')

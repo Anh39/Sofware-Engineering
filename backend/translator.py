@@ -1,6 +1,27 @@
 from enum import Enum
 from backend.translate_backend.translate_lib_api import Handler
-from backend.lib import Language
+from backend import folder_path
+import json
+
+class Lang:
+    languages = {}
+    initialized = False
+    @classmethod
+    def initialize(self):
+        self.initialized = True
+        frontend_files = folder_path.util.get_tree(folder_path.frontend.path)
+
+        for key in frontend_files:
+            if ("language.json" in key):
+                language_file = frontend_files[key]
+        with open(language_file,'r') as file:
+            languages_dict = json.loads(file.read())
+        for key in languages_dict:
+            self.languages[key] = key.split('-')[0]
+    
+        
+        
+                
 
 
 class Translator:
@@ -8,14 +29,7 @@ class Translator:
 
     """
     backend = Handler()
-    lang_map = {
-        'EN' : Language.English,
-        'VN' : Language.Vietnamese,
-        'English' : Language.English,
-        'Vietnamese' : Language.Vietnamese
-    }
-    def __init__(self) -> None:
-        pass
+    languages = Lang()
     def translate(self,
                 from_language : str,
                 to_language : str,
@@ -31,7 +45,11 @@ class Translator:
         Returns:
             str: Kết quả
         """
-        from_language = self.lang_map[from_language]
-        to_language = self.lang_map[to_language]
-        result = self.backend.translate(from_language,to_language,text=input_text)
-        return result
+        if (self.languages.initialized == False):
+            self.languages.initialize()
+        if (from_language in self.languages.languages and to_language in self.languages.languages):
+            from_language = self.languages.languages[from_language]
+            to_language = self.languages.languages[to_language]
+            result = self.backend.translate(from_language,to_language,text=input_text)
+            return result
+        return "EROOR"

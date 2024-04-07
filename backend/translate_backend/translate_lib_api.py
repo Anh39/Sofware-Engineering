@@ -1,19 +1,18 @@
 from translate import Translator
-from backend.lib import Language
+import time
 
 class Handler:
-    Trans_VI_EN = Translator(from_lang="vi",to_lang="en")
-    Trans_EN_VI = Translator(from_lang="en",to_lang="vi")
+    translators = {}
     @classmethod
-    def __translate_en(self,text : str):
-        return self.Trans_EN_VI.translate(text)
-    @classmethod
-    def __translate_vi(self,text : str):
-        return self.Trans_VI_EN.translate(text)
+    def _create_translator(self,lang : tuple): 
+        return Translator(from_lang=lang[0],to_lang=lang[1])
     @classmethod
     def translate(self,from_lang,to_lang,text):
-        if (from_lang == Language.English and to_lang == Language.Vietnamese):
-            return self.__translate_en(text)
-        elif (from_lang == Language.Vietnamese and to_lang == Language.English):
-            return self.__translate_vi(text)
-        return text+"'ERROR'"
+        lang = (from_lang,to_lang)
+        if (lang not in self.translators):
+            self.translators[lang] = self._create_translator(lang)
+        start_time = time.time()
+        result = self.translators[lang].translate(text)
+        end_time = time.time()
+        print(f'Translate time : {end_time-start_time}')
+        return result
