@@ -26,12 +26,19 @@ fromText.addEventListener("input", function () {
     let fromContent = langOption[0].value;
     let transContent = langOption[1].value;
 
-    let transLink = `https://api.mymemory.translated.net/get?q=${content}!&langpair=${fromContent}|${transContent}`;
+    // let transLink = `https://api.mymemory.translated.net/get?q=${content}!&langpair=${fromContent}|${transContent}`;
 
-    fetch(transLink)
+    fetch('/translate/text', {
+        method: "POST",
+        body: JSON.stringify({
+            "from_language": fromContent,
+            "to_language": transContent,
+            "content": content,
+        })
+    })
         .then(translate => translate.json())
         .then(data => {
-            transText.value = data.responseData.translatedText;
+            transText.value = data["text"];
         })
 })
 
@@ -57,7 +64,7 @@ fromText.addEventListener("keyup", function () {
     countValue.innerHTML = `${fromText.value.length}/5,000`;
 })
 
-exchangeLang.addEventListener("click", function() {
+exchangeLang.addEventListener("click", function () {
     let tempText = fromText.value;
     fromText.value = transText.value;
     transText.value = tempText;
