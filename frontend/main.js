@@ -7,6 +7,15 @@ let cpyBtn = document.querySelector(".bx-copy");
 let countValue = document.querySelector(".code_length");
 let exchangeLang = document.querySelector(".bx-transfer");
 
+const historyButton = document.querySelector(".history");
+const historyBox = document.querySelector(".box-history");
+const allContainer = document.querySelector(".all-container");
+const boxContainer = document.querySelector(".box-container");
+
+const removeHistoryBox = document.querySelector(".remove-sidebar");
+
+const historyList = document.querySelector("#history-list");
+
 langOption.forEach((get, con) => {
     for (let countryCode in language) {
         let selected;
@@ -39,6 +48,7 @@ fromText.addEventListener("input", function () {
         .then(translate => translate.json())
         .then(data => {
             transText.value = data["text"];
+            historyList.innerHTML += displayHistory(content, transText.value);
         })
 })
 
@@ -73,3 +83,27 @@ exchangeLang.addEventListener("click", function () {
     langOption[0].value = langOption[1].value;
     langOption[1].value = tempOpt;
 })
+
+historyButton.addEventListener("click", function () {
+    allContainer.classList.add("display-flex");
+    historyBox.classList.add("show");
+})
+
+removeHistoryBox.addEventListener("click", function () {
+    allContainer.classList.remove("display-flex");
+    historyBox.classList.remove("show");
+})
+
+function displayHistory(fromText, transText) {
+    let htmls = "";
+    htmls += `
+        <div class="trans-item">
+            <div class="lang-to-lang">${language[langOption[0].value]} 
+                <span class="arrow"><ion-icon name="arrow-forward-outline"></ion-icon></span> ${language[langOption[1].value]} 
+            </div>
+            <div class="original-text">${fromText}</div>
+            <div class="trans-text">${transText}</div>
+        </div>
+    `;
+    return htmls;
+}

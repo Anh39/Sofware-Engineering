@@ -6,9 +6,9 @@
 }
 
 header {
-    position: fixed;
+    /* position: absolute;
     top: 0;
-    left: 0;
+    left: 0; */
     width: 100%;
     padding: 20px 50px;
     color: #000;
@@ -18,8 +18,8 @@ header {
     justify-content: space-between;
     align-items: center;
     /* background-color: red; */
-    z-index: 99;
-    border-bottom: 1px solid #000;
+    border-bottom: .5px solid #E0E0E0;
+    z-index: 1;
 }
 
 .home {
@@ -50,12 +50,24 @@ a {
     color: #162938;
 }
 
+.all-container {
+    position: absolute;
+    width: 100%;
+}
+
+.all-container.display-flex {
+    position: absolute;
+    display: grid;
+    grid-template-columns: 70% 30%;
+}
+
 .box_container {
-    height: 100vh;
+    height: 75vh;
     background: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-left: 5px;
 }
 
 .container {
@@ -73,7 +85,7 @@ a {
 .translator_property .nuv_item {
     display: flex;
     width: 100%;
-    height: 50px;
+    /* height: 50px; */
     justify-content: space-between;
     align-items: center;
     list-style: none;
@@ -109,7 +121,6 @@ a {
 
 .write_box {
     display: flex;
-
 }
 
 .Property_from,
@@ -166,4 +177,67 @@ a {
 .code_length {
     font-size: 18px;
     color: #606060;
+}
+
+.history {
+    width: 70px;
+    height: 70px;
+    text-align: center;
+    position: absolute;
+    top: 500px;
+    left: center;
+    cursor: pointer;
+    border: 1px solid #757575;
+    border-radius: 50%;
+    line-height: 79px;
+}
+
+.icon {
+    font-size: 40px;
+}
+
+.box-history {
+    height: 647px;
+    background-color: #f4f4f4;
+    display: none;
+}
+
+.box-history.show {
+    display: block;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid #E0E0E0;
+}
+
+#sidebar {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #E0E0E0;
+}
+
+.history-header {
+    font-size: 20px;
+    padding-top: 3px;
+    padding-left: 5px;
+}
+
+.remove {
+    padding-top: 5px;
+    padding-right: 5px;
+}
+
+.remove-sidebar {
+    font-size: 20px;
+}
+
+#history-list {
+    flex-grow: 1;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    overscroll-behavior-y: contain;
+}
+
+.trans-item {
+    border-bottom: 1px solid #E0E0E0;
+    padding: 5px;
 }
