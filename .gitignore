@@ -2,3 +2,7 @@ backend/__pycache__
 backend/translate_backend/__pycache__
 test.py
 test2.py
+test3.py
+app_frontend/
+backend/translate_backend/selenium_handler.py
+.gitignore
