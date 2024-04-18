@@ -10,8 +10,8 @@ const inputLoginUsername = document.querySelector(".input-login-username");
 const inputLoginPassword = document.querySelector(".input-login-password");
 
 const inputRegisterUsername = document.querySelector(".input-register-username");
-const inputRegisterEmail = document.querySelector(".input-register-username");
-const inputRegisterPassword = document.querySelector(".input-register-username");
+const inputRegisterEmail = document.querySelector(".input-register-email");
+const inputRegisterPassword = document.querySelector(".input-register-password");
 
 registerLink.addEventListener('click', () => {
     wrapper.classList.add('active');
@@ -38,18 +38,18 @@ LoginButton.addEventListener('click', () => {
             'password': inputLoginPassword.value
         })
     })
-    .then(response => {
-        if (response.ok) {
-            window.location.href = "./index.html"; 
-            return response.json();
-        } else {
-            console.log("sai");
-        }
-    })
-    .then()
+        .then(response => {
+            if (response.ok) {
+                window.location.href = "./index.html";
+                return response.json();
+            } else {
+                console.log("sai");
+            }
+        })
+        .then()
 })
 
-RegisterButton.addEventListener('click', function() {
+RegisterButton.addEventListener('click', () => {
     fetch("/authentication/register", {
         method: 'POST',
         body: JSON.stringify({
@@ -58,13 +58,13 @@ RegisterButton.addEventListener('click', function() {
             'email': inputRegisterEmail.value
         })
     })
-    .then(response => {
-        if (response.ok) {
-            window.location.href = "./index.html"; 
-            return response.json();
-        } else {
-            console.log("sai");
-        }
-    })
-    .then()
+        .then(response => {
+            if (response.ok) {
+                window.location.href = "./index.html";
+                return response.json();
+            } else {
+                console.log("sai");
+            }
+        })
+        .then()
 })
