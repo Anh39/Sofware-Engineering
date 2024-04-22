@@ -89,15 +89,14 @@ class _insert_command:
         return 'INSERT INTO ' + self.table + '(' + ','.join(self.column) + ') VALUES ("' + '","'.join(self.value) + '")'
 
 class TranslationType(Enum):
-    TEXT = "text"
-    IMAGE = "image"
-    DOC = "doc"
-    WEB = "web"
+    TEXT = "dịch chữ "
+    IMAGE = "hình ảnh"
+    DOC = "tài liệu"
+    AUDIO = "âm thanh"
 
-class Activity_type(Enum):
-    DN = "Đăng nhập"
-    ĐMK = "Đổi mật khẩu"
-    D = "dịch"
+class User_type(Enum):
+    GUEST = 'người dùng khách'
+    REGISTED = 'người dùng đăng kí'
 
 class handler :
     def __init__(self,path : str) -> None:
@@ -116,9 +115,10 @@ class handler :
             return False
     def close(self) -> None:
         self.conn.close()
-    def add_user(self, username: str, password: str, email: str) -> None:
-        insert_cmd = _insert_command('Users', ['Username', 'Password', 'Email'], [username, password, email])
+    def add_user(self, username: str, password: str, email: str,UserType: User_type) -> None:
+        insert_cmd = _insert_command('Users', ['Username', 'Password', 'Email','UserType'], [username, password, email,UserType.value])
         self.cur.execute(insert_cmd.evaluate())
+        self.commit()
     def get_user_by_username(self, username: str):
         command = _select_command(['UserID'], 'Users', ['Username ='], [username])
         self.cur.execute(command.evaluate())
@@ -136,20 +136,16 @@ class handler :
         command = _update_command('Users', ['Password'], [new_password], ['UserID ='], [user_id])
         self.cur.execute(command.evaluate())
         self.commit()
-    def add_translation(self, user_id: int, translation_type: TranslationType, original_data: str, translated_data: str, time: str) -> None:
-        insert_cmd = _insert_command('Translation', ['UserID', 'translation_type', 'original_data', 'translated_data', 'Time'], [user_id, translation_type.value, original_data, translated_data, time])
+    def add_translation(self, user_id: int, translation_type: TranslationType, original_data: str, translated_data: str,OriginalLanguage : str,TranslatedLanguage: str,time: str) -> None:
+        insert_cmd = _insert_command('Translation', ['UserID', 'translation_type', 'original_data', 'translated_data','OriginalLanguage', 'TranslatedLanguage', 'Time'], [user_id, translation_type.value, original_data, translated_data, OriginalLanguage, TranslatedLanguage, time])
         self.cur.execute(insert_cmd.evaluate())
         self.commit()
+    def get_translation_by_UserID(self,UserID:int):
+        command = _select_command(['*'],'Translation',['UserID ='],[UserID])
+        self.cur.execute(command.evaluate())
+        result = self.cur.fetchone()
+        return result
     def delete_translation(self, translation_id: int) -> None:
         delete_cmd = _delete_command('Translation', ['id'], [translation_id])
         self.cur.execute(delete_cmd.evaluate())
         self.commit()
-    def add_user_activity(self, user_id: int, activity_type: Activity_type, activity_time: str, description: str) -> None:
-        insert_cmd = _insert_command('user_activity', ['UserID', 'activity_type', 'activity_time', 'description'], [user_id, activity_type.value, activity_time, description])
-        self.cur.execute(insert_cmd.evaluate())
-        self.commit()
-    def delete_user_activity(self, activity_id: int) -> None:
-        delete_cmd = _delete_command('user_activity', ['activity_id'], [activity_id])
-        self.cur.execute(delete_cmd.evaluate())
-        self.commit()
-    

@@ -1,14 +1,15 @@
 import sqlite3
 
-conn = sqlite3.connect('translate_database.db')
+conn = sqlite3.connect('database/translate_database.db')
 
 cursor = conn.cursor()
 
 cursor.execute('''CREATE TABLE IF NOT EXISTS Users (
                     UserID INTEGER PRIMARY KEY,
-                    Username VARCHAR NOT NULL,
-                    Password VARCHAR NOT NULL,
-                    Email TEXT
+                    Username VARCHAR,
+                    Password VARCHAR,
+                    Email TEXT,
+                    UserType VARCHAR
                   )''')
 
 cursor.execute('''CREATE TABLE IF NOT EXISTS Translation (
@@ -17,16 +18,9 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS Translation (
                     translation_type VARCHAR,
                     original_data TEXT,
                     translated_data TEXT,
+                    OriginalLanguage VARCHAR,
+                    TranslatedLanguage VARCHAR,
                     Time DATETIME,
-                    FOREIGN KEY (UserID) REFERENCES Users(UserID)
-                  )''')
-
-cursor.execute('''CREATE TABLE IF NOT EXISTS user_activity (
-                    activity_id INTEGER PRIMARY KEY,
-                    UserID INTEGER,
-                    activity_type VARCHAR,
-                    activity_time DATETIME,
-                    description TEXT,
                     FOREIGN KEY (UserID) REFERENCES Users(UserID)
                   )''')
 
