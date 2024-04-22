@@ -29,5 +29,5 @@ Thành viên nhóm:
 - Web frontend : [Dương Phương Hiểu](https://github.com/dphieu)
 - Database : [Trần Đức Hùng](https://github.com/hungtran1210)
 ## Cài đặt
-## Giấy phép
-Không có
+ - Chạy file install.bat hoặc instal.ipynb
+ - Chạy phần mềm bằng file main.py. trang web có thể truy cập bằng địa chỉ http://127.0.0.1:8080/
