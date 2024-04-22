@@ -7,6 +7,15 @@ let cpyBtn = document.querySelector(".bx-copy");
 let countValue = document.querySelector(".code_length");
 let exchangeLang = document.querySelector(".bx-transfer");
 
+const historyButton = document.querySelector(".history");
+const historyBox = document.querySelector(".box-history");
+const allContainer = document.querySelector(".all-container");
+const boxContainer = document.querySelector(".box-container");
+
+const removeHistoryBox = document.querySelector(".remove-sidebar");
+
+const historyList = document.querySelector("#history-list");
+
 langOption.forEach((get, con) => {
     for (let countryCode in language) {
         let selected;
@@ -26,12 +35,20 @@ fromText.addEventListener("input", function () {
     let fromContent = langOption[0].value;
     let transContent = langOption[1].value;
 
-    let transLink = `https://api.mymemory.translated.net/get?q=${content}!&langpair=${fromContent}|${transContent}`;
+    // let transLink = `https://api.mymemory.translated.net/get?q=${content}!&langpair=${fromContent}|${transContent}`;
 
-    fetch(transLink)
+    fetch('/translate/text', {
+        method: "POST",
+        body: JSON.stringify({
+            "from_language": fromContent,
+            "to_language": transContent,
+            "content": content,
+        })
+    })
         .then(translate => translate.json())
         .then(data => {
-            transText.value = data.responseData.translatedText;
+            transText.value = data["text"];
+            historyList.innerHTML += displayHistory(content, transText.value);
         })
 })
 
@@ -57,7 +74,7 @@ fromText.addEventListener("keyup", function () {
     countValue.innerHTML = `${fromText.value.length}/5,000`;
 })
 
-exchangeLang.addEventListener("click", function() {
+exchangeLang.addEventListener("click", function () {
     let tempText = fromText.value;
     fromText.value = transText.value;
     transText.value = tempText;
@@ -66,3 +83,27 @@ exchangeLang.addEventListener("click", function() {
     langOption[0].value = langOption[1].value;
     langOption[1].value = tempOpt;
 })
+
+historyButton.addEventListener("click", function () {
+    allContainer.classList.add("display-flex");
+    historyBox.classList.add("show");
+})
+
+removeHistoryBox.addEventListener("click", function () {
+    allContainer.classList.remove("display-flex");
+    historyBox.classList.remove("show");
+})
+
+function displayHistory(fromText, transText) {
+    let htmls = "";
+    htmls += `
+        <div class="trans-item">
+            <div class="lang-to-lang">${language[langOption[0].value]} 
+                <span class="arrow"><ion-icon name="arrow-forward-outline"></ion-icon></span> ${language[langOption[1].value]} 
+            </div>
+            <div class="original-text">${fromText}</div>
+            <div class="trans-text">${transText}</div>
+        </div>
+    `;
+    return htmls;
+}

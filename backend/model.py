@@ -69,6 +69,17 @@ class Model:
     users : Dict[uuid.UUID,User] = {}
     translator : Translator
     @classmethod
+    def save_user_info(self,path = folder_path.backend.user):
+        user_info = []
+        for ele in self.email_info:
+            user_info.append({
+                'username' : self.email_info[ele]['username'],
+                'password' : self.email_info[ele]['password'],
+                'email' : ele
+            })
+        with open(path,'w') as file:
+            file.write(json.dumps(user_info))
+    @classmethod
     def init(self,path : str = folder_path.backend.user):
         """Setup (cài đặt) cơ bản cho lớp
         """
@@ -143,6 +154,7 @@ class Model:
             session_id = uuid.uuid4()
             new_user = RegistedUser(session_id,username,password,email)
             self.users[new_user.identifier] = new_user
+            self.save_user_info()
             return new_user.identifier
         else:
             return None

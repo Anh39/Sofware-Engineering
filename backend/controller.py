@@ -53,11 +53,12 @@ async def authentication(request : web.Request):
             return response
     elif (kind == 'register'):
         content = await request.json()
+        print(content)
         uuid = Model.add_user(content['username'],content['password'],content['email'])
         if (uuid == False or uuid == None):
             return web.Response(text='Failed to register',status=401)
         else:
-            response = web.Response(text='Login successfully',status=200)
+            response = web.Response(text='Register successfully',status=200)
             response.set_cookie('uuid',uuid)
             return response
     elif (kind == 'reset_password'):
