@@ -1,1 +1,14 @@
-[{"username": "abc", "password": "123", "email": "abc@gmail.com"}]
+[
+    {
+        "identifier": "7100cffc-8588-4913-add7-ec95708de320",
+        "username": "abc",
+        "password": "123",
+        "email": "abc@gmail.com"
+    },
+    {
+        "identifier": "8970b054-43de-43dc-b3aa-4e71b1579f3a",
+        "username": "abcd",
+        "password": "31232",
+        "email": "1234@gmail.com"
+    }
+]

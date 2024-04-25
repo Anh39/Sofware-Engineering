@@ -53,7 +53,7 @@ async def authentication(request : web.Request):
             return response
     elif (kind == 'register'):
         content = await request.json()
-        print(content)
+        # print(content)
         uuid = Model.add_user(content['username'],content['password'],content['email'])
         if (uuid == False or uuid == None):
             return web.Response(text='Failed to register',status=401)

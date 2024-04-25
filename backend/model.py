@@ -30,6 +30,8 @@ class User:
         return self.history[from_it:from_it+amount]
     def get_identifier(self) -> str:
         return self.identifier
+    def to_dict(self) -> dict:
+        return {}
     def __hash__(self) -> int:
         return hashlib.sha256(str(self.identifier))
 class Guest(User):
@@ -60,39 +62,36 @@ class RegistedUser(User):
         return self.password
     def get_email(self):
         return self.email
-
+    def to_dict(self):
+        return {
+            'identifier' : self.identifier,
+            'username' : self.username,
+            'password' : self.password,
+            'email' : self.email
+        }
 class Model:
     """Lớp static để quản lý Model
     """
-    username_password = {}
-    email_info = {}
-    users : Dict[uuid.UUID,User] = {}
+    users : Dict[uuid.UUID,User|RegistedUser] = {}
     translator : Translator
     @classmethod
     def save_user_info(self,path = folder_path.backend.user):
         user_info = []
-        for ele in self.email_info:
-            user_info.append({
-                'username' : self.email_info[ele]['username'],
-                'password' : self.email_info[ele]['password'],
-                'email' : ele
-            })
+        for ele in self.users:
+            user_info.append(self.users[ele].to_dict())
         with open(path,'w') as file:
             file.write(json.dumps(user_info))
     @classmethod
     def init(self,path : str = folder_path.backend.user):
-        """Setup (cài đặt) cơ bản cho lớp
+        """Initialize (khởi tạo) cho lớp
         """
         self.translator = Translator()
         content = []
         with open(path,'r') as file:
             content = json.loads(file.read())
         for ele in content:
-            self.username_password[ele['username']] = ele['password']
-            self.email_info[ele['email']] = {
-                'username' : ele['username'],
-                'password' : ele['password']
-            }
+            new_registed_user = RegistedUser(ele['identifier'],ele['username'],ele['password'],ele['email'])
+            self.users[ele['identifier']] = new_registed_user
     @classmethod
     def get_email(self,username : str) -> str:
         """Lấy về email
@@ -103,9 +102,12 @@ class Model:
         Returns:
             str: email
         """
-        for ele in self.email_info:
-            if(self.email_info[ele]['username'] == username):
-                return ele
+        for id in self.users:
+            user = self.users[id]
+            if isinstance(user,RegistedUser):
+                if user.username == username:
+                    return user.email
+        
     @classmethod
     def login(self,username : str,password : str) -> str:
         """Đăng nhập
@@ -118,13 +120,13 @@ class Model:
             str: session_id nếu thành công
             bool: False nếu thất bại
         """
+        
         if (username != None and password != None):
-            if (username in self.username_password):
-                if (self.username_password[username] == password):
-                    session_id = uuid.uuid4()
-                    new_user = RegistedUser(session_id,username,password,self.get_email(username))
-                    self.users[new_user.identifier] = new_user
-                    return new_user.identifier
+            for id in self.users:
+                user = self.users[id]
+                if isinstance(user,RegistedUser):
+                    if user.username == username and user.password == password:
+                        return user.identifier
         return False
     
     @classmethod
@@ -150,7 +152,12 @@ class Model:
         Returns:
             str: session_id
         """
-        if (username not in self.username_password and email not in self.email_info):
+        if (username != None and password != None):
+            for id in self.users:
+                user = self.users[id]
+                if isinstance(user,RegistedUser):
+                    if user.username == username and user.password == password:
+                        return None
             session_id = uuid.uuid4()
             new_user = RegistedUser(session_id,username,password,email)
             self.users[new_user.identifier] = new_user
