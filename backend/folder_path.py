@@ -12,6 +12,7 @@ class backend:
     translator = join(path,'translator.py')
     server = join(path,'server.py')
     user = join(path,'user.json')
+    history = join(path,'history.json')
 class frontend:
     """Path(Đương dẫn) cho các thư mục, tệp trong thư mục frontend
     """
