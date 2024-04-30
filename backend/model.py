@@ -72,27 +72,25 @@ class RegistedUser(User):
 class Model:
     """Lớp static để quản lý Model
     """
-    users : Dict[uuid.UUID,User|RegistedUser] = {}
-    translator : Translator
-    @classmethod
+    def __init__(self) -> None:
+        self.users : Dict[uuid.UUID,User|RegistedUser] = {}
+        self.translator : Translator = Translator()
     def save_user_info(self,path = folder_path.backend.user):
         user_info = []
         for ele in self.users:
             user_info.append(self.users[ele].to_dict())
         with open(path,'w') as file:
             file.write(json.dumps(user_info))
-    @classmethod
     def init(self,path : str = folder_path.backend.user):
         """Initialize (khởi tạo) cho lớp
         """
-        self.translator = Translator()
+
         content = []
         with open(path,'r') as file:
             content = json.loads(file.read())
         for ele in content:
             new_registed_user = RegistedUser(ele['identifier'],ele['username'],ele['password'],ele['email'])
             self.users[ele['identifier']] = new_registed_user
-    @classmethod
     def get_email(self,username : str) -> str:
         """Lấy về email
 
@@ -107,8 +105,6 @@ class Model:
             if isinstance(user,RegistedUser):
                 if user.username == username:
                     return user.email
-        
-    @classmethod
     def login(self,username : str,password : str) -> str:
         """Đăng nhập
 
@@ -128,8 +124,6 @@ class Model:
                     if user.username == username and user.password == password:
                         return user.identifier
         return False
-    
-    @classmethod
     def add_guest(self) -> str:
         """Thêm Guest User (người dùng khách)
 
@@ -140,7 +134,6 @@ class Model:
         new_guest = Guest(session_id)
         self.users[new_guest.identifier] = new_guest
         return new_guest.identifier
-    @classmethod
     def add_user(self,username : str,password : str,email : str) -> str:
         """Đăng ký người dùng mới
 
@@ -165,7 +158,6 @@ class Model:
             return new_user.identifier
         else:
             return None
-    @classmethod
     def validate(self,identifier : str) -> bool:
         """Xác thực người dùng đã đăng ký
 
@@ -176,7 +168,6 @@ class Model:
             bool: True/False
         """
         return (identifier in self.users and type(self.users[identifier]) == RegistedUser)
-    @classmethod
     def guest_validate(self,identifier : str) -> bool:
         """Xác thực người dùng khách (Kiểm tra xem có vào bằng phương thức mặc định không (vào bằng index.html))
 
@@ -187,7 +178,6 @@ class Model:
             bool: True/False
         """
         return (identifier in self.users)
-    @classmethod
     def add_history(self,identifier : str,content : any):
         """Thêm bản ghi lịch sử
 
@@ -198,7 +188,6 @@ class Model:
         """
         user = self.users[identifier]
         user.add_history(content)
-    @classmethod
     def get_history(self,identifier : str,from_it : int,amount : int) -> list:
         """Lấy về lịch sử
 
@@ -212,7 +201,6 @@ class Model:
         """
         user = self.users[identifier]
         return user.get_history(from_it,amount)
-    @classmethod
     def save(self,identifier : str,content : any):
         """Lưu bản ghi người dùng yêu cầu
 
@@ -222,7 +210,6 @@ class Model:
         """
         user : RegistedUser = self.users[identifier]
         user.add_save(content)
-    @classmethod
     def get_saved(self,identifier : str,from_it : int,amount : int) -> list:
         """Lấy bản ghi người dùng đã lưu
 
@@ -236,7 +223,6 @@ class Model:
         """
         user : RegistedUser = self.users[identifier]
         return user.get_saved(from_it,amount)
-    @classmethod
     async def translate_text(self,identifier : str,content : any) -> str:
         """Dịch nội dung chữ
 
@@ -260,6 +246,3 @@ class Model:
         self.add_history(identifier,content)
         return to_content
         
-
-    
-Model.init()

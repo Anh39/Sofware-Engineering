@@ -1,5 +1,5 @@
 from enum import Enum
-from backend.translate_backend.translate_lib_api import Handler
+from backend.translate_backend.translator_api import MyMemoryAPI
 from backend import folder_path
 import json
 
@@ -28,8 +28,9 @@ class Translator:
     """Lớp xử lý việc dịch
 
     """
-    backend = Handler()
-    languages = Lang()
+    def __init__(self) -> None:
+        self.backend = MyMemoryAPI()
+        self.languages = Lang()
     async def translate(self,
                 from_language : str,
                 to_language : str,
@@ -47,9 +48,16 @@ class Translator:
         """
         if (self.languages.initialized == False):
             self.languages.initialize()
-        if (from_language in self.languages.languages and to_language in self.languages.languages):
-            from_language = self.languages.languages[from_language]
-            to_language = self.languages.languages[to_language]
-            result = await self.backend.concurent_translate(from_language,to_language,text=input_text)
-            return result
-        return "EROOR"
+        from_language = self.languages.languages[from_language]
+        to_language = self.languages.languages[to_language]
+        # print(from_language,to_language)
+        self.backend.from_lang = from_language
+        self.backend.to_lang = to_language
+        result = await self.backend.translate(input_text)
+        # if (self.languages.initialized == False):
+        #     self.languages.initialize()
+        # if (from_language in self.languages.languages and to_language in self.languages.languages):
+        #     
+        #     result = await self.backend.concurent_translate(from_language,to_language,text=input_text)
+        #     return result
+        return result

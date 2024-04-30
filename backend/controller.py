@@ -7,9 +7,18 @@ from enum import Enum
 from backend.model import Model
 from backend.model import Type
 import time
+from backend.translate_backend.translator_api import MyMemoryAPI
 
 public = folder_path.frontend.public
 frontend_files = folder_path.util.get_tree(folder_path.frontend.path)
+
+model : Model = None
+
+async def init():
+    global model
+    model = Model()
+
+
 
 for key in frontend_files:
     if ("index.html" in key):
@@ -21,7 +30,7 @@ no_cache = {'Cache-Control':'no-cache'}
 @routes.get('/')
 async def entry(request : web.Request):
     try:
-        session_id = Model.add_guest()
+        session_id = model.add_guest()
         response = web.FileResponse(path=index_file,status=200)
         response.set_cookie('uuid',session_id)
         return response
@@ -44,7 +53,7 @@ async def authentication(request : web.Request):
     kind = request.match_info['kind']
     if (kind == 'login'):
         content = await request.json()
-        uuid = Model.login(content['username'],content['password'])
+        uuid = model.login(content['username'],content['password'])
         if (uuid == False or uuid == None):
             return web.Response(text='Wrong username/password',status=401)
         else:
@@ -54,7 +63,7 @@ async def authentication(request : web.Request):
     elif (kind == 'register'):
         content = await request.json()
         # print(content)
-        uuid = Model.add_user(content['username'],content['password'],content['email'])
+        uuid = model.add_user(content['username'],content['password'],content['email'])
         if (uuid == False or uuid == None):
             return web.Response(text='Failed to register',status=401)
         else:
@@ -71,19 +80,19 @@ async def authentication(request : web.Request):
 async def utility(request : web.Request):
     kind = request.match_info['kind']
     session_id = request.cookies.get('uuid')
-    guest_validate = Model.guest_validate(session_id)
+    guest_validate = model.guest_validate(session_id)
     if (guest_validate != False):
         if (kind == 'history'):
-            history = Model.get_history(session_id,0,10)
+            history = model.get_history(session_id,0,10)
             return web.Response(text=json.dumps(history),status=200,content_type=Type.json)
         elif (kind == 'saved'):
-            if (Model.validate(session_id)):
-                saved = Model.get_saved(session_id,0,10)
+            if (model.validate(session_id)):
+                saved = model.get_saved(session_id,0,10)
                 return web.Response(text=json.dumps(saved),status=200,content_type=Type.json)
         elif (kind == 'save'):
-            if(Model.validate(session_id)):
+            if(model.validate(session_id)):
                 save_content = await request.json()
-                Model.save(session_id,save_content)
+                model.save(session_id,save_content)
                 return web.Response(text='Saved',content_type=Type.plain,status=200)
     return web.Response(text='Method not implemented',status=500)
 
@@ -92,10 +101,10 @@ async def translate(request : web.Request):
     start_time = time.time()
     session_id = request.cookies.get('uuid')
     kind = request.match_info['kind']
-    if (Model.guest_validate(session_id) or True):
+    if (model.guest_validate(session_id) or True):
         if (kind == 'text'):
             content = await request.json()
-            text_result = await Model.translate_text(session_id,content)
+            text_result = await model.translate_text(session_id,content)
             result = {
                 "text" : text_result,
                 "prompt" : content["content"]
@@ -111,3 +120,8 @@ async def request_resoure(request : web.Request):
     if (path in frontend_files):
         return web.FileResponse(path=frontend_files[path],status=200)
     return web.Response(text='File not found',status=404)
+
+def route_start():
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(init())
+    return loop
