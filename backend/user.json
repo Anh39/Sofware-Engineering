@@ -1,14 +1,160 @@
 [
     {
-        "identifier": "7100cffc-8588-4913-add7-ec95708de320",
+        "type": "Guest",
+        "identifier": "59de8cfc-e566-4a0b-a1a3-9a6703b26e9e",
+        "history": []
+    },
+    {
+        "type": "RegistedUser",
+        "identifier": "ffe60372-c8f4-49ca-bfcf-115a6973bfb3",
+        "history": [
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "hel",
+                "to_content": "\u1204\u120d"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "h",
+                "to_content": "h"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "he",
+                "to_content": "\u12a5\u122d\u1231"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "hell",
+                "to_content": "HELL"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "hello",
+                "to_content": "\u1203\u120e \u1246\u1295\u1306"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "hello,",
+                "to_content": "\u1203\u120e \u1246\u1295\u1306"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "hello,k",
+                "to_content": "\u1324\u1293 \u12ed\u1235\u1325\u120d\u129d \u1363\u12ac"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "hello,ka",
+                "to_content": "\u1324\u1293 \u12ed\u1235\u1325\u120d\u129d \u1363\u12ab"
+            }
+        ],
         "username": "abc",
         "password": "123",
         "email": "abc@gmail.com"
     },
     {
-        "identifier": "8970b054-43de-43dc-b3aa-4e71b1579f3a",
-        "username": "abcd",
-        "password": "31232",
-        "email": "1234@gmail.com"
+        "type": "Guest",
+        "identifier": "a694debe-327b-4273-a6dc-5b714c4b2c9b",
+        "history": [
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "a",
+                "to_content": "a"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "",
+                "to_content": "NO QUERY SPECIFIED. EXAMPLE REQUEST: GET?Q=HELLO&LANGPAIR=EN|IT"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "g",
+                "to_content": "g"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "",
+                "to_content": "NO QUERY SPECIFIED. EXAMPLE REQUEST: GET?Q=HELLO&LANGPAIR=EN|IT"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "h",
+                "to_content": "h"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "he",
+                "to_content": "\u12a5\u122d\u1231"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "hello",
+                "to_content": "\u1203\u120e \u1246\u1295\u1306"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "hel",
+                "to_content": "\u1204\u120d"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "hell",
+                "to_content": "HELL"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "h",
+                "to_content": "h"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "hmm",
+                "to_content": "hmm"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "hm",
+                "to_content": "hm"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": ":",
+                "to_content": "\u121d\u12ad\u1295\u12eb\u1275 \u12a8\u1270\u1320\u1240\u1230\u12cd \u1218\u1320\u1295 \u1260\u120b\u12ed \u1260\u1293\u1219\u1293 \u1218\u120d\u12ad \u1218\u120b\u12ad \u12a0\u121d\u122b\u127d \u120b\u12aa\u12ce\u127d \u1260\u121a\u12a8\u1270\u1208\u12cd \u12a0\u12b3\u128b\u1295 \u1218\u1235\u1270\u1293\u1308\u12f5 \u12ed\u127d\u120b\u1209\u1361-"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": ":)",
+                "to_content": ":)"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": ":))",
+                "to_content": ":))"
+            }
+        ]
     }
 ]
