@@ -55,11 +55,84 @@
                 "to_language": "am-ET",
                 "from_content": "hello,ka",
                 "to_content": "\u1324\u1293 \u12ed\u1235\u1325\u120d\u129d \u1363\u12ab"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "he",
+                "to_content": "\u12a5\u122d\u1231"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "hel",
+                "to_content": "\u1204\u120d"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "h",
+                "to_content": "h"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "hell",
+                "to_content": "HELL"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "hello",
+                "to_content": "\u1203\u120e \u1246\u1295\u1306"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "h",
+                "to_content": "h"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "he",
+                "to_content": "\u12a5\u122d\u1231"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "hel",
+                "to_content": "\u1204\u120d"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "hello",
+                "to_content": "\u1203\u120e \u1246\u1295\u1306"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "hell",
+                "to_content": "HELL"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "h",
+                "to_content": "h"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "he",
+                "to_content": "\u12a5\u122d\u1231"
             }
         ],
         "username": "abc",
         "password": "123",
-        "email": "abc@gmail.com"
+        "email": "abc@gmail.com",
+        "saved": []
     },
     {
         "type": "Guest",
@@ -156,5 +229,27 @@
                 "to_content": ":))"
             }
         ]
+    },
+    {
+        "type": "RegistedUser",
+        "identifier": "051514a2-152c-483e-b944-c7efca906bda",
+        "history": [
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "h",
+                "to_content": "h"
+            },
+            {
+                "from_language": "en-GB",
+                "to_language": "am-ET",
+                "from_content": "he",
+                "to_content": "\u12a5\u122d\u1231"
+            }
+        ],
+        "username": "abc2",
+        "password": "12312312",
+        "email": "dw2@gmail.com",
+        "saved": []
     }
 ]

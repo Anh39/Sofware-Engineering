@@ -8,6 +8,8 @@ from backend.model import Model
 from backend.model import Type
 import time
 from backend.translate_backend.translator_api import MyMemoryAPI
+from aiohttp_apispec import setup_aiohttp_apispec,docs,request_schema,headers_schema
+from backend.documetation_schema import *
 
 public = folder_path.frontend.public
 frontend_files = folder_path.util.get_tree(folder_path.frontend.path)
@@ -27,7 +29,17 @@ for key in frontend_files:
 routes = web.RouteTableDef()
 no_cache = {'Cache-Control':'no-cache'}
 
-@routes.get('/')
+
+@docs(
+    tags=["Entry"],
+    description="Url mặc định khi vào page",
+    responses = {
+        200 : {'description' : 'Server không lỗi'},
+        500 : {'description' : 'Server lỗi'}
+    }
+)
+@request_schema(Schema())
+@routes.head('/')
 async def entry(request : web.Request):
     try:
         session_id = model.add_guest()
@@ -37,82 +49,158 @@ async def entry(request : web.Request):
     except:
         return web.Response(text='Server error',status=500)
 
-# @routes.get('/{name}')
-# async def request_resource(request : web.Request):
-#     name = request.match_info['name']
-#     try:
-#         session_id = request.cookies.get('uuid')
-#         if (Model.guest_validate(session_id)):
-#             return web.FileResponse(path=mapping[name],status=200)
-#         return web.Response(text='Server error',status=500)
-#     except:
-#         return web.Response(text='Resource not found',status=404)
-
-@routes.post('/authentication/{kind}')
-async def authentication(request : web.Request):
-    kind = request.match_info['kind']
-    if (kind == 'login'):
-        content = await request.json()
-        uuid = model.login(content['username'],content['password'])
-        if (uuid == False or uuid == None):
-            return web.Response(text='Wrong username/password',status=401)
-        else:
-            response = web.Response(text='Login successfully',status=200)
-            response.set_cookie('uuid',uuid)
-            return response
-    elif (kind == 'register'):
-        content = await request.json()
-        # print(content)
-        uuid = model.add_user(content['username'],content['password'],content['email'])
-        if (uuid == False or uuid == None):
-            return web.Response(text='Failed to register',status=401)
-        else:
-            response = web.Response(text='Register successfully',status=200)
-            response.set_cookie('uuid',uuid)
-            return response
-    elif (kind == 'reset_password'):
-        return web.Response(text='Method not implemented',status=500)
+@docs(
+    tags=["Authentication"],
+    description="Đăng nhập",
+    responses={
+        200 : {'description' : 'Đăng nhập thành công'},
+        401 : {'description' : 'Đăng nhập thất bại'}
+    }
+)
+@headers_schema(ValidationSchema())
+@request_schema(LoginSchema())
+@routes.post('/authentication/login')
+async def login(request : web.Request):
+    content = await request.json()
+    uuid = model.login(content['username'],content['password'])
+    if (uuid == False or uuid == None):
+        return web.Response(text='Sai tên người dùng/mật khẩu',status=401)
     else:
-        return web.Response(text='Method not implemented',status=500)
+        response = web.Response(text='Đăng nhập thành công',status=200)
+        response.set_cookie('uuid',uuid)
+        return response
+@docs(
+    tags=["Authentication"],
+    description="Đăng ký",
+    responses={
+        200 : {'description' : 'Đăng ký thành công'},
+        401 : {'description' : 'Đăng ký thất bại'}
+    }
+)
+@headers_schema(ValidationSchema())
+@request_schema(RegisterSchema())
+@routes.post('/authentication/register')
+async def register(request : web.Request):
+    content = await request.json()
+    uuid = model.add_user(content['username'],content['password'],content['email'])
+    if (uuid == False or uuid == None):
+        return web.Response(text='Đăng ký thất bại',status=401)
+    else:
+        response = web.Response(text='Đăng ký thành công',status=200)
+        response.set_cookie('uuid',uuid)
+        return response
+@docs(
+    tags=["Authentication","Not Implemented"],
+    description="Đặt lại mật khẩu",
+    responses={
+        200 : {'description' : 'Đặt lại mật khẩu thành công'},
+        401 : {'description' : 'Đặt lại mật khẩu thất bại'}
+    }
+)
+@headers_schema(ValidationSchema())
+@request_schema(ResetPasswordSchema())
+@routes.patch('/authentication/reset_password')
+async def reset_password(request : web.Request):
+    return web.Response(text='Method not implemented',status=500)
 
-
-@routes.post('/utility/{kind}')
-async def utility(request : web.Request):
-    kind = request.match_info['kind']
+@docs(
+    tags=["Utility"],
+    description="Lấy về lịch sử bản dịch",
+    responses={
+        200 : {
+            'schema' : MultiTranslationResponseSchema,
+            'description' : 'Các bản dịch'
+            },
+        401 : {'description' : 'Lỗi khi xác thực'}
+    }
+)
+@headers_schema(ValidationSchema())
+@request_schema(GetHistorySchema())
+@routes.post('/utility/history')
+async def get_history(request : web.Request):
     session_id = request.cookies.get('uuid')
     guest_validate = model.guest_validate(session_id)
     if (guest_validate != False):
-        if (kind == 'history'):
-            history = model.get_history(session_id,0,10)
-            return web.Response(text=json.dumps(history),status=200,content_type=Type.json)
-        elif (kind == 'saved'):
-            if (model.validate(session_id)):
-                saved = model.get_saved(session_id,0,10)
-                return web.Response(text=json.dumps(saved),status=200,content_type=Type.json)
-        elif (kind == 'save'):
-            if(model.validate(session_id)):
-                save_content = await request.json()
-                model.save(session_id,save_content)
-                return web.Response(text='Saved',content_type=Type.plain,status=200)
-    return web.Response(text='Method not implemented',status=500)
+        body = await request.json()
+        history = model.get_history(session_id,body['from_item'],body['amount'])
+        return web.Response(text=json.dumps(history),status=200,content_type=Type.json)
+    else:
+        return web.Response(text='Lỗi xác thực',status=401)
 
-@routes.post('/translate/{kind}')
+@docs(
+    tags=["Utility"],
+    description="Lấy về bản dịch đã lưu",
+    responses={
+        200 : {
+            'schema' : MultiTranslationResponseSchema,
+            'description' : 'Các bản dịch'
+            },
+        401 : {'description' : 'Lỗi khi xác thực'}
+    }
+)
+@headers_schema(ValidationSchema())
+@request_schema(GetSavedSchema())
+@routes.post('/utility/saved')
+async def get_saved(request : web.Request):
+    session_id = request.cookies.get('uuid')
+    validate = model.guest_validate(session_id)
+    if (validate != False):
+        body = await request.json()
+        saved = model.get_history(session_id,body['from_item'],body['amount'])
+        return web.Response(text=json.dumps(saved),status=200,content_type=Type.json)
+    else:
+        return web.Response(text='Lỗi xác thực',status=401)
+    
+@docs(
+    tags=["Utility"],
+    description="Lưu bản dịch",
+    responses={
+        200 : {'description' : 'Các bản dịch'},
+        401 : {'description' : 'Lỗi khi xác thực'}
+    }
+)
+@headers_schema(ValidationSchema())
+@request_schema(SaveSchema())
+@routes.post('/utility/save')
+async def save_translation(request : web.Request):
+    session_id = request.cookies.get('uuid')
+    validate = model.validate(session_id)
+    if (validate != False):
+        save_content = await request.json()
+        model.save(session_id,save_content)
+        return web.Response(text='Saved',content_type=Type.plain,status=200)
+    else:
+        return web.Response(text='Lỗi xác thực',status=401)
+
+@docs(
+    tags=["Translate"],
+    description="Dịch nội dung text",
+    responses={
+        200 : {
+            'schema' : TranslationResponseShortSchema,
+            'description' : 'Nội dung dịch'
+            },
+        401 : {'description' : 'Lỗi khi xác thực'}
+    }
+)
+@headers_schema(ValidationSchema())
+@request_schema(GetHistorySchema())
+@routes.post('/translate/text')
 async def translate(request : web.Request):
     start_time = time.time()
     session_id = request.cookies.get('uuid')
-    kind = request.match_info['kind']
-    if (model.guest_validate(session_id) or True):
-        if (kind == 'text'):
-            content = await request.json()
-            text_result = await model.translate_text(session_id,content)
-            result = {
-                "text" : text_result,
-                "prompt" : content["content"]
-            }
-            end_time = time.time()
-            print(f'Request process time : {end_time-start_time}')
-            return web.Response(text=json.dumps(result),status=200)
-    return web.Response(text='Method not implemented',status=500)
+    if (model.guest_validate(session_id)):
+        content = await request.json()
+        text_result = await model.translate_text(session_id,content)
+        result = {
+            "text" : text_result,
+            "prompt" : content["content"]
+        }
+        end_time = time.time()
+        print(f'Request process time : {end_time-start_time}')
+        return web.Response(text=json.dumps(result),status=200)
+    else:
+        return web.Response(text='Lỗi xác thực',status=401)
 
 @routes.get('/{tail:.*}')
 async def request_resoure(request : web.Request):

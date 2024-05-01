@@ -5,7 +5,6 @@ from enum import Enum
 import hashlib
 from typing import Dict
 from backend.translator import Translator
-from abc import abstractmethod
 from backend.datatype import *
 
 class Model:
@@ -21,13 +20,6 @@ class Model:
             user_info.append(self.users[ele].to_dict())
         with open(path,'w') as file:
             file.write(json.dumps(user_info))
-    # def save_history(self,path = folder_path.backend.history):
-    #     user_history = []
-    #     for key in self.users:
-    #         new_data = self.users[key].to_dict()
-    #         user_history.append(new_data)
-    #     with open(path,'w') as file:
-    #         file.write(json.dumps(user_history))
     def init(self,path : str = folder_path.backend.user):
         content = []
         with open(path,'r') as file:
@@ -84,9 +76,9 @@ class Model:
     def get_history(self,identifier : str,from_it : int,amount : int) -> list:
         user = self.users[identifier]
         return user.get_history(from_it,amount)
-    def save(self,identifier : str,content : any):
+    def save(self,identifier : str,translation : dict[str,object]):
         user : RegistedUser = self.users[identifier]
-        user.add_save(content)
+        user.add_save(translation)
     def get_saved(self,identifier : str,from_it : int,amount : int) -> list:
         user : RegistedUser = self.users[identifier]
         return user.get_saved(from_it,amount)

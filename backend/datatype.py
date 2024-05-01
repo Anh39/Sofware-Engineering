@@ -82,9 +82,11 @@ class RegistedUser(User):
         result['username'] = self.username
         result['password'] = self.password
         result['email'] = self.email
+        result['saved'] = self.saved
         return result
     @classmethod
     def from_dict(self, input: dict[str, object]) -> User:
         new_user = RegistedUser(input['identifier'],input['username'],input['password'],input['email'])
         new_user.history = input['history']
+        new_user.saved = input['saved']
         return new_user
