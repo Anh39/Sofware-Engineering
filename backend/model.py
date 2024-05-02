@@ -22,8 +22,11 @@ class Model:
     async def init(self,path : str = folder_path.backend.user):
         await self.translator.init()
         content = []
-        with open(path,'r') as file:
-            content = json.loads(file.read())
+        try:
+            with open(path,'r') as file:
+                content = json.loads(file.read())
+        except:
+            pass
         for ele in content:
             if (ele['type'] == 'Guest'):
                 new_user = Guest.from_dict(ele)

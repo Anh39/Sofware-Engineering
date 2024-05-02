@@ -7,4 +7,6 @@ pip install uuid
 pip install typing
 pip install aiohttp-apispec
 pip install playwright
+pip install openai
+pip install tiktoken
 playwright install

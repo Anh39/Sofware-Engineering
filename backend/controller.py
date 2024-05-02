@@ -44,7 +44,7 @@ no_cache = {'Cache-Control':'no-cache'}
 async def entry(request : web.Request):
     try:
         session_id = model.add_guest()
-        response = web.FileResponse(path=index_file,status=200)
+        response = web.FileResponse(path=index_file,status=200,headers=no_cache)
         response.set_cookie('uuid',session_id)
         return response
     except:
@@ -207,7 +207,7 @@ async def translate(request : web.Request):
 async def request_resoure(request : web.Request):
     path = os.path.normpath(request.match_info['tail'])
     if (path in frontend_files):
-        return web.FileResponse(path=frontend_files[path],status=200)
+        return web.FileResponse(path=frontend_files[path],status=200,headers=no_cache)
     return web.Response(text='File not found',status=404)
 
 def route_start():

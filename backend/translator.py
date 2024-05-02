@@ -1,5 +1,5 @@
 from enum import Enum
-from backend.translate_backend.translator_api import MyMemoryAPI,GooglePlaywrightAPI
+from backend.translate_backend.translator_api import *
 from backend import folder_path
 import json
 
@@ -31,7 +31,8 @@ class Translator:
     """
     mapping = {
         "google_playwright" : GooglePlaywrightAPI,
-        "mymemory_aiohttp" : MyMemoryAPI
+        "mymemory_aiohttp" : MyMemoryAPI,
+        "openai_chatgpt" : OpenAIAPI
     }
     def __init__(self) -> None:
         self.backend = self.mapping[config['translator']['backend']]()
