@@ -7,7 +7,6 @@
         "backend" : "openai_chatgpt",
         "list" : [
             "google_playwright","mymemory_aiohttp","openai_chatgpt"
-        ],
-        "openai_api_key" : "ask someone who has key"
+        ]
     }
 }
