@@ -5,4 +5,4 @@ test2.py
 test3.py
 app_frontend/
 backend/translate_backend/selenium_handler.py
-.gitignore
+apikey.json

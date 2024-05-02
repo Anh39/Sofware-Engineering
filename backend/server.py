@@ -21,7 +21,7 @@ with open(folder_path.config,'r') as file:
 app.add_routes(routes)
 
 
-def start(port : int = 8080):
+def start():
 
     loop = route_start()
     web.run_app(app,host=config['server']['host'],port=int(config['server']['port']),loop=loop)
