@@ -1,28 +1,27 @@
 from abc import abstractmethod
 import aiohttp,asyncio
 from urllib.parse import urlencode,quote
+from backend.translate_backend.playwright_handler import Handler
 
 class BaseAPI:
     name = 'Base'
     base_url = ''
-    def __init__(self,from_lang : str = 'en',to_lang : str = 'vi') -> None:
-        self.from_lang : str = from_lang
-        self.to_lang : str = to_lang
+    def __init__(self) -> None:
         self.session = aiohttp.ClientSession(self.base_url)
     async def close(self):
         await self.session.close()
     @abstractmethod
-    def translate(self,content : str):
+    def translate(self,content : str,from_lang : str = 'en',to_lang : str = 'vi'):
         return None
     
 class MyMemoryAPI(BaseAPI):
     name = 'MyMemory'
     base_url = 'https://api.mymemory.translated.net'
-    def __init__(self, from_lang: str = 'en', to_lang: str = 'vi',email : str = None) -> None:
-        super().__init__(from_lang, to_lang)
+    def __init__(self,email : str = None) -> None:
+        super().__init__()
         self.email = email
-    async def translate(self,content : str):
-        params = {'q' : content,'langpair' : '{}|{}'.format(self.from_lang,self.to_lang)}
+    async def translate(self,content : str,from_lang : str = 'en',to_lang : str = 'vi'):
+        params = {'q' : content,'langpair' : '{}|{}'.format(from_lang,to_lang)}
         if (self.email != None):
             params['de'] = self.email
         async with self.session.get(url='/get',params=params) as response:
@@ -36,6 +35,16 @@ class MyMemoryAPI(BaseAPI):
                     return matches[0]['translation']
                 else:
                     return 'ERROR'
+                
+class GooglePlaywrightAPI:
+    name = 'Goggle Playwright'
+    def __init__(self) -> None:
+        self.handler = Handler()
+    async def init(self):
+        await self.handler.init()
+    async def translate(self,content : str,from_lang : str = 'en',to_lang : str = 'vi'):
+        result = await self.handler.translate(content,from_lang,to_lang)
+        return result
             
             
         

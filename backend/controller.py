@@ -19,6 +19,7 @@ model : Model = None
 async def init():
     global model
     model = Model()
+    await model.init()
 
 
 
@@ -39,7 +40,7 @@ no_cache = {'Cache-Control':'no-cache'}
     }
 )
 @request_schema(Schema())
-@routes.head('/')
+@routes.get('/')
 async def entry(request : web.Request):
     try:
         session_id = model.add_guest()

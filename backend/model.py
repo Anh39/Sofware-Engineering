@@ -13,14 +13,14 @@ class Model:
     def __init__(self) -> None:
         self.users : Dict[str,User|RegistedUser] = {}
         self.translator : Translator = Translator()
-        self.init()
     def save_user_info(self,path = folder_path.backend.user):
         user_info = []
         for ele in self.users:
             user_info.append(self.users[ele].to_dict())
         with open(path,'w') as file:
             file.write(json.dumps(user_info))
-    def init(self,path : str = folder_path.backend.user):
+    async def init(self,path : str = folder_path.backend.user):
+        await self.translator.init()
         content = []
         with open(path,'r') as file:
             content = json.loads(file.read())

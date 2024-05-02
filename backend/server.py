@@ -1,4 +1,4 @@
-import aiohttp
+import aiohttp,json
 from aiohttp import web
 from backend import folder_path
 from backend.controller import routes,route_start
@@ -15,11 +15,14 @@ setup_aiohttp_apispec(
     swagger_path='/api/docs'
 )
 
+with open(folder_path.config,'r') as file:
+    config = json.loads(file.read())
+    
 app.add_routes(routes)
 
 
 def start(port : int = 8080):
 
     loop = route_start()
-    web.run_app(app,host='127.0.0.1',port=port,loop=loop)
+    web.run_app(app,host=config['server']['host'],port=int(config['server']['port']),loop=loop)
 
