@@ -21,7 +21,8 @@ Thành viên nhóm:
 - Cho phép người dùng sử dụng từ điển riêng
 - Cho phép người dùng sử dụng backend dịch khác như Google Translate, DeepL, ChatGPT, Gemini, ....
 ## Công nghệ sử dụng:
-- Backend : python [aiohttp](https://docs.aiohttp.org/en/stable/ ), (tạm thời [translate](https://pypi.org/project/translate/))
+- Documentation : [aiohttp-apispec](https://pypi.org/project/aiohttp-apispec/)
+- Backend : python [aiohttp](https://docs.aiohttp.org/en/stable/ ), [MyMemory](https://mymemory.translated.net/), [Google Translate](https://translate.google.com/) thông qua [Playwright](https://playwright.dev/)
 - Frontend
 - Database
 ## Đóng góp:
