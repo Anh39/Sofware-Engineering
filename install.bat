@@ -6,3 +6,5 @@ pip install json
 pip install uuid
 pip install typing
 pip install aiohttp-apispec
+pip install playwright
+playwright install
