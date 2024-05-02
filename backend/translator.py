@@ -1,5 +1,5 @@
 from enum import Enum
-from backend.translate_backend.translator_api import MyMemoryAPI
+from backend.translate_backend.translator_api import MyMemoryAPI,GooglePlaywrightAPI
 from backend import folder_path
 import json
 
@@ -22,15 +22,25 @@ class Lang:
         
         
                 
-
+with open(folder_path.config,'r') as file:
+    config = json.loads(file.read())
 
 class Translator:
     """Lớp xử lý việc dịch
 
     """
+    mapping = {
+        "google_playwright" : GooglePlaywrightAPI,
+        "mymemory_aiohttp" : MyMemoryAPI
+    }
     def __init__(self) -> None:
-        self.backend = MyMemoryAPI()
+        self.backend = self.mapping[config['translator']['backend']]()
         self.languages = Lang()
+    async def init(self):
+        try:
+            await self.backend.init()
+        except:
+            pass
     async def translate(self,
                 from_language : str,
                 to_language : str,
@@ -51,9 +61,7 @@ class Translator:
         from_language = self.languages.languages[from_language]
         to_language = self.languages.languages[to_language]
         # print(from_language,to_language)
-        self.backend.from_lang = from_language
-        self.backend.to_lang = to_language
-        result = await self.backend.translate(input_text)
+        result = await self.backend.translate(input_text,from_language,to_language)
         # if (self.languages.initialized == False):
         #     self.languages.initialize()
         # if (from_language in self.languages.languages and to_language in self.languages.languages):
