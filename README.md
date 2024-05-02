@@ -22,7 +22,7 @@ Thành viên nhóm:
 - Cho phép người dùng sử dụng backend dịch khác như Google Translate, DeepL, ChatGPT, Gemini, ....
 ## Công nghệ sử dụng:
 - Documentation : [aiohttp-apispec](https://pypi.org/project/aiohttp-apispec/)
-- Backend : python [aiohttp](https://docs.aiohttp.org/en/stable/ ), [MyMemory](https://mymemory.translated.net/), [Google Translate](https://translate.google.com/) thông qua [Playwright](https://playwright.dev/)
+- Backend : python [aiohttp](https://docs.aiohttp.org/en/stable/ ), [MyMemory](https://mymemory.translated.net/), [Google Translate](https://translate.google.com/) thông qua [Playwright](https://playwright.dev/), [ChatGPT](https://platform.openai.com/docs/overview) thông qua [openai-python](https://github.com/openai/openai-python)
 - Frontend
 - Database
 ## Đóng góp:
@@ -30,5 +30,7 @@ Thành viên nhóm:
 - Web frontend : [Dương Phương Hiểu](https://github.com/dphieu)
 - Database : [Trần Đức Hùng](https://github.com/hungtran1210)
 ## Cài đặt
- - Chạy file install.bat (Hoặc chạy file install.ipynb và thêm lệnh playwright install sử dụng command line/terminal/console)
+ - Chạy file install.bat
+   - Hoặc chạy file install.ipynb và thêm lệnh playwright install sử dụng command line/terminal/console
+   - Nếu dịch dùng ChatGPT cần thêm file apikey.json vào thư mục gốc chứa {"openai" : "api key của bạn"}
  - Chạy phần mềm bằng file main.py. trang web có thể truy cập bằng địa chỉ http://127.0.0.1:8080/
