@@ -8,8 +8,8 @@ import tiktoken
 from enum import Enum
 from backend import folder_path
 
-with open(folder_path.config,'r') as file:
-    config = json.loads(file.read())
+with open(folder_path.apikey,'r') as file:
+    apikey = json.loads(file.read())
 
 
 class MyMemoryAPI:
@@ -56,7 +56,7 @@ class OpenAIAPI:
     def __init__(self) -> None:
         self.encoder = tiktoken.get_encoding(self.ENCODER_NAME)
         self.client = AsyncOpenAI(
-            api_key=config['translator']['openai_api_key']
+            api_key=apikey['openai']
         )
         self.model = 'gpt-3.5-turbo-1106'
     async def translate(self,content : str,from_lang : str = 'en',to_lang : str = 'vi'):
@@ -78,7 +78,7 @@ class OpenAIAPI:
                 model=self.model
             )
         except Exception as e:
-            print('API or CONNECTION error. API key : {}'.format(config['translator']['openai_api_key']))
+            print('API or CONNECTION error. API key : {}'.format(apikey['openai']))
             return 'Server error'
             
         result = json.loads(chat_completion.model_dump_json())
