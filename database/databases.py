@@ -94,10 +94,6 @@ class TranslationType(Enum):
     DOC = "tài liệu"
     AUDIO = "âm thanh"
 
-class User_type(Enum):
-    GUEST = 'người dùng khách'
-    REGISTED = 'người dùng đăng kí'
-
 class handler :
     def __init__(self,path : str) -> None:
         self.conn = sqlite3.connect(path)
@@ -115,35 +111,55 @@ class handler :
             return False
     def close(self) -> None:
         self.conn.close()
-    def add_user(self, username: str, password: str, email: str,UserType: User_type) -> None:
-        insert_cmd = _insert_command('Users', ['Username', 'Password', 'Email','UserType'], [username, password, email,UserType.value])
+    def add_RegisteredUser(self, username: str, password: str, email: str) -> None:
+        insert_cmd = _insert_command('RegisteredUser', ['Username', 'Password', 'Email'], [username, password, email])
         self.cur.execute(insert_cmd.evaluate())
         self.commit()
     def get_user_by_username(self, username: str):
-        command = _select_command(['UserID'], 'Users', ['Username ='], [username])
+        command = _select_command(['*'], 'RegisteredUser', ['Username ='], [username])
         self.cur.execute(command.evaluate())
         result = self.cur.fetchone()
-        if result:
-            return result[0]
-        else:
-            return None
-    def update_user_email(self, user_id: int, new_email: str):
-        command = _update_command('Users', ['Email'], [new_email], ['UserID ='], [user_id])
-        print(command.evaluate())
-        self.cur.execute(command.evaluate())
-        self.commit()
-    def update_user_password(self, user_id: int, new_password: str):
-        command = _update_command('Users', ['Password'], [new_password], ['UserID ='], [user_id])
-        self.cur.execute(command.evaluate())
-        self.commit()
-    def add_translation(self, user_id: int, translation_type: TranslationType, original_data: str, translated_data: str,OriginalLanguage : str,TranslatedLanguage: str,time: str) -> None:
-        insert_cmd = _insert_command('Translation', ['UserID', 'translation_type', 'original_data', 'translated_data','OriginalLanguage', 'TranslatedLanguage', 'Time'], [user_id, translation_type.value, original_data, translated_data, OriginalLanguage, TranslatedLanguage, time])
+        return result
+    def add_GuestUser(self, SSID: str):
+        insert_cmd = _insert_command('GuestUser', ['SSID'], [SSID])
         self.cur.execute(insert_cmd.evaluate())
         self.commit()
-    def get_translation_by_UserID(self,UserID:int):
-        command = _select_command(['*'],'Translation',['UserID ='],[UserID])
+    def get_user_by_SSID(self, SSID):
+        command = _select_command(['*'], 'GuestUser', ['SSID ='], [SSID])
         self.cur.execute(command.evaluate())
         result = self.cur.fetchone()
+        return result
+    def get_all_RegisteredUser(self):
+        cmd = 'SELECT * FROM RegisteredUser'
+        self.cur.execute(cmd)
+        result = self.cur.fetchall()
+        return result
+    def get_all_GuestUser(self):
+        cmd = 'SELECT * FROM GuestUser'
+        self.cur.execute(cmd)
+        result = self.cur.fetchall()
+        return result
+    def update_RegisteredUser_email(self, user_name: str, new_email: str):
+        command = _update_command('RegisteredUser', ['Email'], [new_email], ['Username ='], [user_name])
+        self.cur.execute(command.evaluate())
+        self.commit()
+    def update_RegisteredUser_password(self, user_name: str, new_password: str):
+        command = _update_command('RegisteredUser', ['Password'], [new_password], ['Username ='], [user_name])
+        self.cur.execute(command.evaluate())
+        self.commit()
+    def add_translation(self, translation_type: TranslationType, original_data: str, translated_data: str,OriginalLanguage : str,TranslatedLanguage: str,time: str,saved : bool,tags : str,username :str,SSID :str) -> None:
+        insert_cmd = _insert_command('Translation', ['translation_type', 'original_data', 'translated_data','OriginalLanguage', 'TranslatedLanguage', 'Time','Saved','Tags','Username','SSID'], [translation_type.value, original_data, translated_data, OriginalLanguage, TranslatedLanguage, time,saved ,tags, username,SSID])
+        self.cur.execute(insert_cmd.evaluate())
+        self.commit()
+    def get_translation_by_Username(self,username: str):
+        command = _select_command(['*'],'Translation',['Username ='],[username])
+        self.cur.execute(command.evaluate())
+        result = self.cur.fetchall()
+        return result
+    def get_translation_by_SSID(self,SSID: str):
+        command = _select_command(['*'],'Translation',['SSID ='],[SSID])
+        self.cur.execute(command.evaluate())
+        result = self.cur.fetchall()
         return result
     def delete_translation(self, translation_id: int) -> None:
         delete_cmd = _delete_command('Translation', ['id'], [translation_id])
