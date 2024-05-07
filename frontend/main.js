@@ -1,20 +1,81 @@
-let langOption = document.querySelectorAll('select');
-let fromText = document.querySelector(".fromText");
-let transText = document.querySelector(".toTranslate");
-let fromVoice = document.querySelector(".from");
-let toVoice = document.querySelector(".to");
-let cpyBtn = document.querySelector(".bx-copy");
-let countValue = document.querySelector(".code_length");
-let exchangeLang = document.querySelector(".bx-transfer");
+const langOption = document.querySelectorAll('select');
+const fromText = document.querySelector(".fromText");
+const transText = document.querySelector(".toTranslate");
+const fromVoice = document.querySelector(".from");
+const toVoice = document.querySelector(".to");
+const cpyBtn = document.querySelector(".bx-copy");
+const countValue = document.querySelector(".code_length");
+const exchangeLang = document.querySelector(".bx-transfer");
 
 const historyButton = document.querySelector(".history");
 const historyBox = document.querySelector(".box-history");
 const allContainer = document.querySelector(".all-container");
 const boxContainer = document.querySelector(".box-container");
+const boxWrapper = document.querySelector(".box-wrapper");
 
 const removeHistoryBox = document.querySelector(".remove-sidebar");
 
 const historyList = document.querySelector("#history-list");
+
+// login.html
+
+const wrapper = document.querySelector('.wrapper');
+const loginLink = document.querySelector('.login-link');
+const registerLink = document.querySelector('.register-link');
+const loginPopup = document.querySelector('.login-popup');
+const iconClose = document.querySelector('.icon-close');
+const LoginButton = document.querySelector('#Login');
+const RegisterButton = document.querySelector('#Register');
+
+const inputLoginUsername = document.querySelector(".input-login-username");
+const inputLoginPassword = document.querySelector(".input-login-password");
+
+const inputRegisterUsername = document.querySelector(".input-register-username");
+const inputRegisterEmail = document.querySelector(".input-register-email");
+const inputRegisterPassword = document.querySelector(".input-register-password");
+
+registerLink.addEventListener('click', () => {
+    wrapper.classList.add('active');
+})
+
+loginLink.addEventListener('click', () => {
+    wrapper.classList.remove('active');
+})
+
+iconClose.addEventListener('click', () => {
+    // wrapper.classList.remove('active-popup');
+    allContainer.classList.remove("none-display");
+    boxWrapper.classList.remove("block-display");
+})
+
+LoginButton.addEventListener('click', () => {
+    fetch('/authentication/login', {
+        method: 'POST',
+        body: JSON.stringify({
+            'username': inputLoginUsername.value,
+            'password': inputLoginPassword.value
+        })
+    })
+        .then(response => {
+            if (response.ok) {
+                allContainer.classList.remove("none-display");
+                boxWrapper.classList.remove("block-display");
+
+                console.log(inputLoginUsername.value);
+                return response.json();
+            } else {
+                alert("tên đăng nhập hoặc mật khẩu không chính xác");
+            }
+        })
+        .then()
+})
+
+// end login
+
+loginPopup.addEventListener("click", () => {
+    allContainer.classList.add("none-display");
+    boxWrapper.classList.add("block-display");
+})
 
 langOption.forEach((get, con) => {
     for (let countryCode in language) {
@@ -48,7 +109,8 @@ fromText.addEventListener("input", function () {
         .then(translate => translate.json())
         .then(data => {
             transText.value = data["text"];
-            historyList.innerHTML += displayHistory(content, transText.value);
+            historyList.insertAdjacentHTML('afterbegin', displayHistory(content, transText.value));
+
         })
 })
 

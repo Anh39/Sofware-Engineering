@@ -1,0 +1,111 @@
+.layout-default {
+    display: flex;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ddd;
+    color: #fff;
+    padding: 20px;
+    width: 100%;
+}
+
+.header__menu {
+    margin-right: 10px;
+    margin-left: -5px;
+}
+
+.header__logo {
+    color: #000;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.header__search {
+    margin-bottom: -25px;
+    align-items: center;
+}
+
+.header__search--input {
+    width: 500px;
+}
+
+.header__button {
+    display: flex;
+    justify-content:space-evenly;
+}
+
+.header__button--login {
+    margin-right: 5px;
+}
+
+.header__button--register {
+    margin-left: 5px;
+}
+
+.header__menu--icon {
+    background: #fff;
+    padding: 5px;
+    margin-right: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.trans__type--button {
+    margin: 10px 20px;
+    color: #1967d2;
+    font-weight: 600;
+}
+
+.swap {
+    font-size: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.swap:hover {
+    border-radius: 50%;
+    box-shadow: #000;
+}
+
+.text {
+    color: #000;
+    font-weight: 500;
+    cursor: pointer;;
+}
+
+.select__lang {
+    margin: 10px 20px;
+    color: #1967d2;
+    font-weight: 600;
+    width: 200px;
+}
+
+.selected {
+    background: #ddd;
+}
+
+.below-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 90vh;
+}
+
+.main {
+    text-align: center;
+    background-color: #fff;
+    flex: 1;
+}
+
+.footer {
+    text-align: center;
+    width: 100%;
+    margin: 20px 0;
+}
+
+.margin-right {
+    margin-right: -3px;
+}

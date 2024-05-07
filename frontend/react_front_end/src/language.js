@@ -1,4 +1,4 @@
-const language = {
+export const language = {
     "am-ET": "Amharic",
     "ar-SA": "Arabic",
     "be-BY": "Bielarus",

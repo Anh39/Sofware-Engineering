@@ -13,6 +13,9 @@ const inputRegisterUsername = document.querySelector(".input-register-username")
 const inputRegisterEmail = document.querySelector(".input-register-email");
 const inputRegisterPassword = document.querySelector(".input-register-password");
 
+const header = document.querySelector("header");
+const login = header.querySelector(".login");
+
 registerLink.addEventListener('click', () => {
     wrapper.classList.add('active');
 })
@@ -41,9 +44,12 @@ LoginButton.addEventListener('click', () => {
         .then(response => {
             if (response.ok) {
                 window.location.href = "./index.html";
+                if (login) {
+                    login.remove();
+                } 
                 return response.json();
             } else {
-                console.log("sai");
+                alert("tên đăng nhập hoặc mật khẩu không chính xác");
             }
         })
         .then()
@@ -63,7 +69,7 @@ RegisterButton.addEventListener('click', () => {
                 window.location.href = "./index.html";
                 return response.json();
             } else {
-                console.log("sai");
+                // alert("tên đăng nhập hoặc mật khẩu không chính xác");
             }
         })
         .then()
