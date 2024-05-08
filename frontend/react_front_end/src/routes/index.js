@@ -3,6 +3,7 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Logout from "../pages/Logout";
 import Register from "../pages/Register";
+import SavedText from "../pages/SavedText";
 import TransDocs from "../pages/TransDocs";
 
 export const routes = [
@@ -28,6 +29,10 @@ export const routes = [
             {
                 path: "/register",
                 element: <Register />
+            },
+            {
+                path: "/saved",
+                element: <SavedText />
             },
             {
                 path: "/logout",

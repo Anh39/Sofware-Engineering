@@ -1,10 +1,21 @@
-import { Button } from "antd";
+import { Button, Drawer } from "antd";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 // Laptop gaming, đồ họa
 
 function Header(props) {
     const { token } = props;
+
+    const [open, setOpen] = useState(false);
+
+    const showDrawer = () => {
+        setOpen(true);
+    };
+
+    const onClose = () => {
+        setOpen(false);
+    };
 
     return (
         <>
@@ -16,7 +27,7 @@ function Header(props) {
                 <div className="header__button">
                     {token ? (
                         <>
-                            <Button className="header__button--login" type="primary">
+                            <Button className="header__button--login" type="primary" onClick={showDrawer}>
                                 bản dịch đã lưu
                             </Button>
                             <Button className="header__button--register">
@@ -35,6 +46,10 @@ function Header(props) {
                     )}
                 </div>
             </div>
+
+            <Drawer title="Bản dịch đã lưu" onClose={onClose} open={open}>
+                <p>Nothing</p>
+            </Drawer>
         </>
     )
 }
