@@ -23,7 +23,7 @@ Thành viên nhóm:
 ## Công nghệ sử dụng:
 - Documentation : [aiohttp-apispec](https://pypi.org/project/aiohttp-apispec/)
 - Backend : python [aiohttp](https://docs.aiohttp.org/en/stable/ ), [MyMemory](https://mymemory.translated.net/), [Google Translate](https://translate.google.com/) thông qua [Playwright](https://playwright.dev/), [ChatGPT](https://platform.openai.com/docs/overview) thông qua [openai-python](https://github.com/openai/openai-python)
-- Frontend
+- Frontend: ReactJs, [ant.design](https://ant.design/)
 - Database
 ## Đóng góp:
 - Server backend : [Vũ Đức Anh](https://github.com/Anh39)
