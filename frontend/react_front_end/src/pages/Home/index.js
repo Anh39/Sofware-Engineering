@@ -1,12 +1,15 @@
 import { Button, Col, Flex, Row, Select } from "antd";
-import { ZhihuOutlined, PaperClipOutlined, SwapOutlined, SoundOutlined } from "@ant-design/icons";
+import { ZhihuOutlined, PaperClipOutlined, SwapOutlined, SoundOutlined, CopyOutlined, StarOutlined, StarFilled } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../../language";
 import { language } from "../../language";
 import TextArea from "antd/es/input/TextArea";
+import { getCookie } from "../../helpers/cookie";
 
 function Home() {
+    const token = getCookie("token");
+
     const [FromLang, setFromLang] = useState({ value: 'en-GB', label: language['en-GB'] });
     const [ToLang, setToLang] = useState({ value: 'vi-VN', label: language['vi-VN'] });
 
@@ -19,6 +22,7 @@ function Home() {
     }));
 
     const [selectedButton, setSelectedButton] = useState("");
+    const [isSaved, setIsSaved] = useState(false);
 
     const handleClick = (buttonType) => {
         setSelectedButton(buttonType);
@@ -53,12 +57,35 @@ function Home() {
         setToLang({ value: option, label: option });
     }
 
+    const SpeakInputText = () => {
+        const synth = window.speechSynthesis;
+        const utterThis = new SpeechSynthesisUtterance(inputText);
+        utterThis.lang = FromLang.label;
+        synth.speak(utterThis);
+    }
+
+    const SpeakTranslatedText = () => {
+        const synth = window.speechSynthesis;
+        const utterThis = new SpeechSynthesisUtterance(translatedText);
+        utterThis.lang = ToLang.label;
+        synth.speak(utterThis);
+    }
+
+    const Copy = () => {
+        navigator.clipboard.writeText(translatedText);
+    }
+
+    const Save = () => {
+        setIsSaved(!isSaved);
+        // lưu bản dịch
+    }
+
     useEffect(() => {
         if (inputText) {
             translateText(inputText);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [inputText, translatedText]);
+    }, [inputText, translatedText, ToLang.label]);
 
     return (
         <>
@@ -100,7 +127,18 @@ function Home() {
                             className="margin-right"
                             onChange={(e) => setInputText(e.target.value)}
                         />
-                        <SoundOutlined />
+                        <div className="btn fromlang">
+                            <Button shape="circle" onClick={SpeakInputText}>
+                                <SoundOutlined />
+                            </Button>
+                            {token && translatedText !== "" ? (
+                                <>
+                                    <Button shape="circle" onClick={Save}>
+                                        {isSaved ? <StarFilled /> : <StarOutlined />}
+                                    </Button>
+                                </>
+                            ) : (<></>)}
+                        </div>
                     </Col>
                     <Col xl={12}>
                         <TextArea
@@ -110,6 +148,14 @@ function Home() {
                             readOnly
                             className="text"
                         />
+                        <div className="btn tolang">
+                            <Button shape="circle" onClick={SpeakTranslatedText}>
+                                <SoundOutlined />
+                            </Button>
+                            <Button shape="circle" onClick={Copy}>
+                                <CopyOutlined />
+                            </Button>
+                        </div>
                     </Col>
                 </Row>
             </Flex>
