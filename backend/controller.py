@@ -30,6 +30,35 @@ for key in frontend_files:
 routes = web.RouteTableDef()
 no_cache = {'Cache-Control':'no-cache'}
 
+@routes.get('/users')
+async def users(request : web.Request):
+    username = request.query.get('username')
+    password = request.query.get('password')
+    print(username,password)
+    uuid = model.login(username,password)
+    if (uuid == False or uuid == None):
+        return web.Response(text='Sai tên người dùng/mật khẩu',status=401)
+    else:       
+        result = {
+            'id' : 0,
+            'username' : username,
+            'email' : password,
+            'token' : uuid
+        }
+        print(result)
+        response = web.Response(text=json.dumps(result),status=200)
+        return response 
+
+@routes.post('/authentication/register')
+async def register(request : web.Request):
+    content = await request.json()
+    uuid = model.add_user(content['username'],content['password'],content['email'])
+    if (uuid == False or uuid == None):
+        return web.Response(text='Đăng ký thất bại',status=401)
+    else:
+        response = web.Response(text='Đăng ký thành công',status=200)
+        response.set_cookie('uuid',uuid)
+        return response        
 
 @docs(
     tags=["Entry"],

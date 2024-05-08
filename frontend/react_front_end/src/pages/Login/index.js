@@ -19,12 +19,14 @@ function Login() {
 
     const onFinish = async (e) => {
         const response = await login(e.username, e.password);
+        console.log(response);
+
         if (response.length > 0) {
-            console.log(response);
-            setCookie("id", response[0].id, 1);
-            setCookie("username", response[0].username, 1);
-            setCookie("email", response[0].email, 1);
-            setCookie("token", response[0].token, 1);
+            setCookie("id", response.id, 1);
+            setCookie("username", response.username, 1);
+            setCookie("email", response.email, 1);
+            setCookie("token", response.token, 1);
+            
             dispatch(checkLogin(true));
             navigate("/");
         } else {

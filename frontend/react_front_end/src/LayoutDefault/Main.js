@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 
-function Main() {
+function Main(props) {
     return (
         <>
             <div className="main">
