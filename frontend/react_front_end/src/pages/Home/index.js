@@ -6,6 +6,7 @@ import "../../language";
 import { language } from "../../language";
 import TextArea from "antd/es/input/TextArea";
 import { getCookie } from "../../helpers/cookie";
+import { translateTextServer } from "../../Services/userService";
 
 function Home() {
     const token = getCookie("token");
@@ -29,12 +30,36 @@ function Home() {
     }
 
     const translateText = async (text) => {
-        const apiUrl = `https://api.mymemory.translated.net/get?q=${text}&langpair=${FromLang.label}|${ToLang.label}`;
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-        if (data.responseData) {
-            setTranslatedText(data.responseData.translatedText);
+        // const apiUrl = `https://api.mymemory.translated.net/get?q=${text}&langpair=${FromLang.label}|${ToLang.label}`;
+        // const response = await fetch(apiUrl);
+        // const data = await response.json();
+        // if (data.responseData) {
+        //     setTranslatedText(data.responseData.translatedText);
+        // }
+        // const apiUrl = `https://api.mymemory.translated.net/get?q=${text}&langpair=${FromLang.label}|${ToLang.label}`;
+        let mapping = {
+            'English' : 'en-GB',
+            'Vietnamese' : 'vi-VN'
         }
+        const options = {
+            from_language : mapping[FromLang.label],
+            to_language : mapping[ToLang.label],
+            content : text
+        }
+        console.log('Cookie : ',document.cookie);
+        const response = await translateTextServer(options);
+        if (response.ok) {
+            const data = await response.json();
+            setTranslatedText(data['text']);
+        } else {
+            try {
+                setTranslatedText(response.text());
+            }
+            catch {
+                setTranslatedText('Exception');
+            }
+        }
+
     };
 
     const SwapLang = () => {

@@ -12,7 +12,7 @@ from aiohttp_apispec import setup_aiohttp_apispec,docs,request_schema,headers_sc
 from backend.documetation_schema import *
 
 public = folder_path.frontend.public
-frontend_files = folder_path.util.get_tree(folder_path.frontend.path)
+frontend_files = folder_path.util.get_tree(folder_path.frontend.path+'\\raw_front_end')
 
 model : Model = None
 
@@ -31,7 +31,7 @@ routes = web.RouteTableDef()
 no_cache = {'Cache-Control':'no-cache'}
 
 @routes.get('/users')
-async def users(request : web.Request):
+async def users_login(request : web.Request):
     username = request.query.get('username')
     password = request.query.get('password')
     print(username,password)
@@ -40,14 +40,25 @@ async def users(request : web.Request):
         return web.Response(text='Sai tên người dùng/mật khẩu',status=401)
     else:       
         result = {
-            'id' : 0,
+            'id' : 0, # to be removed
             'username' : username,
             'email' : password,
             'token' : uuid
         }
         print(result)
         response = web.Response(text=json.dumps(result),status=200)
+        response.set_cookie('uuid',uuid)
         return response 
+@routes.post('/users')
+async def users_register(request : web.Request):
+    body = await request.json()
+    uuid = model.add_user(body['username'],body['password'],body['email'])
+    if (uuid == False or uuid == None):
+        return web.Response(text='Đăng ký thất bại',status=401)
+    else:
+        response = web.Response(text='Đăng ký thành công',status=200)
+        # response.set_cookie('uuid',uuid)
+        return response        
 
 @routes.post('/authentication/register')
 async def register(request : web.Request):
@@ -153,7 +164,8 @@ async def get_history(request : web.Request):
     if (guest_validate != False):
         body = await request.json()
         history = model.get_history(session_id,body['from_item'],body['amount'])
-        return web.Response(text=json.dumps(history),status=200,content_type=Type.json)
+        # print(history)
+        return web.Response(text=json.dumps(history),status=200)
     else:
         return web.Response(text='Lỗi xác thực',status=401)
 
@@ -219,6 +231,7 @@ async def save_translation(request : web.Request):
 async def translate(request : web.Request):
     start_time = time.time()
     session_id = request.cookies.get('uuid')
+    print(session_id)
     if (model.guest_validate(session_id)):
         content = await request.json()
         text_result = await model.translate_text(session_id,content)
@@ -237,6 +250,9 @@ async def request_resoure(request : web.Request):
     path = os.path.normpath(request.match_info['tail'])
     if (path in frontend_files):
         return web.FileResponse(path=frontend_files[path],status=200,headers=no_cache)
+    elif (os.path.normpath(folder_path.join('raw_front_end',path)) in frontend_files):
+        return web.FileResponse(path=frontend_files[path],status=200,headers=no_cache)
+    print('{} not found'.format(path))
     return web.Response(text='File not found',status=404)
 
 def route_start():

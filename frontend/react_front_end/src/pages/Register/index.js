@@ -1,7 +1,8 @@
 import { Button, Card, Col, Form, Input, Row } from "antd";
 import { useNavigate } from "react-router-dom";
-import { checkExists, register } from "../../Services/userService";
-import { generateToken } from "../../helpers/generateToken";
+import { register } from "../../Services/userService";
+// import { checkExists, register } from "../../Services/userService";
+// import { generateToken } from "../../helpers/generateToken";
 
 function Register() {
     const navigate = useNavigate();
@@ -14,24 +15,27 @@ function Register() {
     ];
 
     const onFinish = async (e) => {
-        const checkExistsEmail = await checkExists("email", e.email);
-        if (checkExistsEmail.length > 0) {
-            alert("Email đã tồn tại");
+        // const checkExistsEmail = await checkExists("email", e.email);
+        // if (checkExistsEmail.length > 0) {
+        //     alert("Email đã tồn tại");
+        // } else {
+
+        const options = {
+            username: e.username,
+            email: e.email,
+            password: e.password
+            // token: generateToken()
+        };
+        console.log(e.username);
+        const response = await register(options);
+        console.log(console);
+        if (response.ok) {
+            navigate("/login");
         } else {
-            const options = {
-                username: e.username,
-                email: e.email,
-                password: e.password,
-                token: generateToken()
-            };
-            const response = await register(options);
-            console.log(response);
-            if (response) {
-                navigate("/login");
-            } else {
-                alert("Sai tài khoản hoặc mật khẩu");
-            }
+            alert("Tài khoản hoặc email đã tồn tại");
         }
+
+        // }
     }
 
     return (
@@ -43,7 +47,7 @@ function Register() {
                             <Form.Item label="Email" name="email" rules={rules}>
                                 <Input />
                             </Form.Item>
-                            <Form.Item label="Số điện thoại" name="phone" rules={rules}>
+                            <Form.Item label="Username" name="username" rules={rules}>
                                 <Input />
                             </Form.Item>
                             <Form.Item label="Password" name="password" rules={rules}>

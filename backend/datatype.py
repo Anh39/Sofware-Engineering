@@ -24,7 +24,7 @@ class User:
     def add_history(self,element):
         self.history.append(element)
     def get_history(self,from_it : int,amount : int):
-        return self.history[from_it:from_it+amount]
+        return self.history[from_it:min(from_it+amount,len(self.history)-from_it-1)]
     def get_identifier(self) -> str:
         return self.identifier
     @abstractmethod

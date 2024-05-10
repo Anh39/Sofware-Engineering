@@ -63,8 +63,8 @@ class Model:
             new_user = RegistedUser(session_id,username,password,email)
             self.users[new_user.identifier] = new_user
             self.save_user_info()
-            for key in self.users:
-                print(key,self.users[key].to_dict())
+            # for key in self.users:
+            #     print(key,self.users[key].to_dict())
             return new_user.identifier
         else:
             return None

@@ -1,23 +1,21 @@
 const API_DOMAIN = "http://localhost:3000/"; // đổi tại đây
 
 export const get = async (path) => {
-    const response = await fetch(API_DOMAIN + path);
-    const result = response.json();
-    return result;
+    const response = await fetch(API_DOMAIN + path);;
+    return response;
 };
 
 export const post = async (path, option) => {
     const response = await fetch(API_DOMAIN + path, {
         method: "POST",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
-        },
+        // headers: {
+        //     // Accept: "application/json",
+        //     "Content-Type": "application/json"
+        // },
         body: JSON.stringify(option)
     });
 
-    const result = await response.json();
-    return result;
+    return response;
 };
 
 export const del = async (path) => {
