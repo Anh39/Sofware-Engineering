@@ -1,11 +1,13 @@
 import { Button, Drawer } from "antd";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
-// Laptop gaming, đồ họa
+import { useSelector} from "react-redux";
 
 function Header(props) {
     const { token } = props;
+    const isLogin = useSelector(state => state.loginReducer);
+
+    console.log(isLogin);
 
     const [open, setOpen] = useState(false);
 
@@ -25,7 +27,7 @@ function Header(props) {
                 </div>
 
                 <div className="header__button">
-                    {token ? (
+                    {token && isLogin ? (
                         <>
                             <Button className="header__button--login" type="primary" onClick={showDrawer}>
                                 bản dịch đã lưu

@@ -1,8 +1,6 @@
 import { Button, Card, Col, Form, Input, Row } from "antd";
 import { useNavigate } from "react-router-dom";
 import { register } from "../../Services/userService";
-// import { checkExists, register } from "../../Services/userService";
-// import { generateToken } from "../../helpers/generateToken";
 
 function Register() {
     const navigate = useNavigate();
@@ -15,16 +13,10 @@ function Register() {
     ];
 
     const onFinish = async (e) => {
-        // const checkExistsEmail = await checkExists("email", e.email);
-        // if (checkExistsEmail.length > 0) {
-        //     alert("Email đã tồn tại");
-        // } else {
-
         const options = {
             username: e.username,
             email: e.email,
             password: e.password
-            // token: generateToken()
         };
         console.log(e.username);
         const response = await register(options);

@@ -7,36 +7,35 @@
     overflow: hidden;
 }
 #user:hover {
-    background-color: hsl(0, 0%, 85%);
+    background-color: #ddd;
 }
 #user img{
     width: auto;
     height: auto;
 }
 #user_container {
-    border: 2px solid hsl(0, 0%, 80%);
+    border: 2px solid #ccc;
     border-radius: 8px;
     position: absolute;
     display: flex;
     flex-direction: column;
     margin-right: 5%;
-    top: 10px;
+    top: 5px;
     right: 5px;
-    width: 250px;
+    width: 150px;
     height: auto;
-    background-color: hsl(0, 0%, 90%);
+    background-color: #ddd;
     padding: 5px;
 }
 
 #user_container span {
-    width: 90%;
+    width: 100%;
     margin-top: 5px;
-    margin-left: 5%;
     margin-bottom: 5px;
     height: auto;
-    font-size: x-large;
-    border-bottom: 1px solid black;
-
+    font-size: 15px;
+    padding: 5px;
+    cursor: pointer;
 }
 #user_container span:hover {
     background-color: hsl(0, 0%, 70%);

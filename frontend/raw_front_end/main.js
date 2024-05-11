@@ -66,7 +66,6 @@ function entry_handler() {
     logout_button.addEventListener('click', () => {
         UserInfo.clear();
         hide_user();
-        show_login();
         show_login_button();
         set_cookie('uuid','');
     })
@@ -129,21 +128,6 @@ fromText.addEventListener("input", function () {
     let transContent = langOption[1].value;
 
     TranslateManager.add_queue(fromContent,transContent,content);
-    // let transLink = `https://api.mymemory.translated.net/get?q=${content}!&langpair=${fromContent}|${transContent}`;
-
-    // fetch('/translate/text', {
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //         "from_language": fromContent,
-    //         "to_language": transContent,
-    //         "content": content,
-    //     })
-    // })
-    //     .then(translate => translate.json())
-    //     .then(data => {
-    //         transText.value = data["text"];
-
-    //     })
 })
 
 fromVoice.addEventListener("click", function () {
