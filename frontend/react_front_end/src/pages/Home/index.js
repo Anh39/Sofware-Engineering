@@ -1,7 +1,6 @@
 import { Button, Col, Flex, Row, Select } from "antd";
-import { ZhihuOutlined, PaperClipOutlined, SwapOutlined, SoundOutlined, CopyOutlined, StarOutlined, StarFilled } from "@ant-design/icons";
+import { SwapOutlined, SoundOutlined, CopyOutlined, StarOutlined, StarFilled } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import "../../language";
 import { language } from "../../language";
 import TextArea from "antd/es/input/TextArea";
@@ -22,12 +21,7 @@ function Home() {
         value: key,
     }));
 
-    const [selectedButton, setSelectedButton] = useState("");
     const [isSaved, setIsSaved] = useState(false);
-
-    const handleClick = (buttonType) => {
-        setSelectedButton(buttonType);
-    }
 
     const translateText = async (text) => {
         let mapping = {
@@ -107,15 +101,6 @@ function Home() {
 
     return (
         <>
-            <Flex className="trans__type" gap="large">
-                <Button className={`trans__type--button ${selectedButton === "text" ? "selected" : ""}`} onClick={() => handleClick("text")} >
-                    <Link to="/"><ZhihuOutlined /> Dịch văn bản</Link>
-                </Button>
-                <Button className={`trans__type--button ${selectedButton === "document" ? "selected" : ""}`} onClick={() => handleClick("document")} >
-                    <Link to="/docs"><PaperClipOutlined /> Dịch tài liệu</Link>
-                </Button>
-            </Flex>
-
             <Flex justify="center">
                 <Select
                     onChange={handleChangeFromLang}

@@ -1,7 +1,8 @@
 import { Button, Drawer } from "antd";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useSelector} from "react-redux";
+import { useSelector } from "react-redux";
+import Personal from "../components/Personal";
 
 function Header(props) {
     const { token } = props;
@@ -27,6 +28,9 @@ function Header(props) {
                 </div>
 
                 <div className="header__button">
+                    <div>
+                        <Personal />
+                    </div>
                     {token && isLogin ? (
                         <>
                             <Button className="header__button--login" type="primary" onClick={showDrawer}>
@@ -35,6 +39,9 @@ function Header(props) {
                             <Button className="header__button--register">
                                 <Link to="/logout">Đăng xuất</Link>
                             </Button>
+                            {
+                                // đưa Personal vào thay thế 2 nút này
+                            }
                         </>
                     ) : (
                         <>
