@@ -4,16 +4,20 @@ import uuid
 from enum import Enum
 import hashlib
 from typing import Dict
-from backend.server.model import RegistedUser,Guest,TranslateRecord,LoginRequest,RegisterRequest
+from backend.server.model import RegistedUser,ChangePasswordRequest,Guest,TranslateRecord,LoginRequest,RegisterRequest,TranslationRequest,TranslationResponse
 from backend.database.api import DatabaseAPI
 from fastapi import HTTPException
+import asyncio
 
 class UserController:
     DYNAMIC_TOKEN = False
-    local_users : Dict[str,Guest|RegistedUser] = {}
-    database_api : DatabaseAPI = DatabaseAPI()
+    def __init__(self):
+        self.database_api : DatabaseAPI = DatabaseAPI()
+        self.translate_jobs : dict[str,list[tuple[asyncio.Task,TranslationRequest]]] = {}
+        self.update_delay : float = 0.5
     def start(self):
         self.database_api.start()
+        asyncio.create_task(self.maintain())
     async def _get_user_by_username(self,username : str) -> RegistedUser:
         result = await self.database_api.user(action='get',search={'username' : username})
         return result
@@ -77,91 +81,44 @@ class UserController:
         await self.database_api.saved(action='delete',token=token,record=record)
     async def get_user(self,token : str) :
         return await self._get_user_by_token(token)
-    
-# class Manager:
-#     def __init__(self) -> None:
-#         self.users : Dict[str,Guest|RegistedUser] = {}
-#     def save_user_info(self,path = folder_path.backend.user):
-#         user_info = []
-#         for ele in self.users:
-#             user_info.append(self.users[ele].model_dump_json())
-#         with open(path,'w') as file:
-#             file.write(json.dumps(user_info))
-#     async def init(self,path : str = folder_path.backend.user):
-#         # await self.translator.init()
-#         content = []
-#         try:
-#             with open(path,'r') as file:
-#                 content = json.loads(file.read())
-#         except:
-#             pass
-#         for ele in content:
-#             if (ele['type'] == 'Guest'):
-#                 new_user = Guest.model_validate(ele)
-#             else:
-#                 new_user = RegistedUser.model_validate(ele)
-#             self.users[new_user.token] = new_user
-#     def get_email(self,username : str) -> str:
-#         for id in self.users:
-#             user = self.users[id]
-#             if isinstance(user,RegistedUser):
-#                 if user.username == username:
-#                     return user.email
-#     def login(self,username : str,password : str) -> str:
-#         if (username != None and password != None):
-#             for id in self.users:
-#                 user = self.users[id]
-#                 if isinstance(user,RegistedUser):
-#                     if user.username == username and user.password == password:
-#                         return user.token
-#         return False
-#     def add_guest(self) -> str:
-#         session_id = str(uuid.uuid4())
-#         new_guest = Guest(token=session_id)
-#         self.users[new_guest.token] = new_guest
-#         return new_guest.token
-#     def add_user(self,username : str,password : str,email : str) -> str:
-#         if (username != None and password != None):
-#             for id in self.users:
-#                 user = self.users[id]
-#                 if isinstance(user,RegistedUser):
-#                     if user.username == username and user.password == password:
-#                         return None
-#             session_id = str(uuid.uuid4())
-#             new_user = RegistedUser(session_id,username,password,email)
-#             self.users[new_user.token] = new_user
-#             self.save_user_info()
-#             return new_user.token
-#         else:
-#             return None
-#     def validate(self,token : str) -> bool:
-#         return (token in self.users and type(self.users[token]) == RegistedUser)
-#     def guest_validate(self,token : str) -> bool:
-#         return (token in self.users)
-#     def add_history(self,token : str,content : TranslateRecord):
-#         user = self.users[token]
-#         user.add_history(content)
-#         self.save_user_info()
-#     def get_history(self,token : str,from_it : int,amount : int) -> list:
-#         user = self.users[token]
-#         return user.get_history(from_it,amount)
-#     # def save(self,token : str,translation : dict[str,object]):
-#     #     user : RegistedUser = self.users[token]
-#     #     user.add_save(translation)
-#     def get_saved(self,token : str,from_it : int,amount : int) -> list:
-#         user : RegistedUser = self.users[token]
-#         return user.get_saved(from_it,amount)
-    # async def translate_text(self,token : str,content : any) -> str:
-    #     from_language = content['from_language']
-    #     to_language = content['to_language']
-    #     from_content = content['from_content']
-    #     to_content = await self.translator.translate(from_language,to_language,from_content)
-    #     content = {
-    #         'from_language' : from_language,
-    #         'to_language' : to_language,
-    #         'from_content' : from_content,
-    #         'to_content' : to_content
-    #     }
-    #     self.add_history(token,content)
-    #     return to_content
-        
+    async def change_password(self,token : str,request : ChangePasswordRequest) -> bool:
+        user = await self._get_user_by_token(token)
+        if (user == None):
+            return False
+        if (user.password == request.old_password):
+            user.password = request.new_password
+            await self.database_api.user(action='update',token=token,user=user)
+            return True
+        else:
+            return False
+    def add_job(self,job : asyncio.Task,token : str,request : TranslationRequest):
+        if (token in self.translate_jobs):
+            self.translate_jobs[token].append((job,request))
+        else:
+            self.translate_jobs[token] = [(job,request)]
+
+    async def maintain(self):
+        while(True):
+            empty_jobs_token = []
+            for token in self.translate_jobs:
+                jobs = self.translate_jobs[token]
+                if (len(jobs) == 0):
+                    empty_jobs_token.append(token)
+                for job,request in jobs:
+                    if job.done():
+                        result : TranslationResponse = job.result()
+                        record = TranslateRecord(
+                            from_content=request.from_content,
+                            to_content=result.to_content,
+                            from_language=request.from_language,
+                            to_language=request.to_language,
+                            engine_used=result.engine_used
+                        )
+                        await self.add_history(token,record)
+                        jobs.pop(0)
+                    else:
+                        break
+                    
+            for token in empty_jobs_token:
+                self.translate_jobs.pop(token)
+            await asyncio.sleep(self.update_delay)

@@ -44,22 +44,22 @@ class TranslationRequest(BaseModel):
         max_length=8
     )
     from_content : str = Field(
-        # min_length=1,
+        min_length=1,
         max_length=5000
     )
     engine : str = Field(
-        # min_length=1,
+        min_length=1,
         max_length=50,
         default='auto'
     )
 
 class TranslationResponse(BaseModel):
     to_content : str = Field(
-        # min_length=1,
+        min_length=1,
         max_length=5000
     )
     engine_used : str = Field(
-        # min_length=1,
+        min_length=1,
         max_length=500,
         default='Google'
     ) 
@@ -74,10 +74,14 @@ class TranslateRecord(TranslationResponse):
         max_length=8
     )
     from_content : str = Field(
-        # min_length=1,
+        min_length=1,
         max_length=5000
     )
-    
+
+class ChangePasswordRequest(BaseModel):
+    old_password : str
+    new_password : str    
+
 class GetRecordRequest(BaseModel):
     start_from : int = Field(gt=-1,lt=10000)
     amount : int = Field(gt=-1,lt=10000)
