@@ -71,8 +71,13 @@ class UserController:
         return user != None
     async def add_history(self,token : str,record : TranslateRecord)-> RegistedUser | Guest:
         await self.database_api.history(action='add',token=token,record=record)
-
-
+    async def save_record(self,token : str,record : TranslateRecord) -> None:
+        await self.database_api.saved(action='add',token=token,record=record)
+    async def delete_record(self,token : str,record : TranslateRecord) -> None:
+        await self.database_api.saved(action='delete',token=token,record=record)
+    async def get_user(self,token : str) :
+        return await self._get_user_by_token(token)
+    
 # class Manager:
 #     def __init__(self) -> None:
 #         self.users : Dict[str,Guest|RegistedUser] = {}

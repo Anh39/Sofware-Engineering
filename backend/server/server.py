@@ -92,7 +92,9 @@ async def get_history(
 ) -> list[TranslateRecord]:
     validation = await user_manger.guest_validate(token)
     if (validation):
-        result = user_manger.get_history(token,start_from,amount)
+        user = await user_manger.get_user(token)
+        request = GetRecordRequest(start_from=start_from,amount=amount)
+        result = user.get_history(request)
         return result
     else:
         raise HTTPException(status_code=401)
@@ -105,7 +107,9 @@ async def get_saved(
 ) -> list[TranslateRecord]:
     validation = await user_manger.validate(token)
     if (validation):
-        result = user_manger.get_saved(token,start_from,amount)
+        user = await user_manger.get_user(token)
+        request = GetRecordRequest(start_from=start_from,amount=amount)
+        result = user.get_saved(request)
         return result
     else:
         raise HTTPException(status_code=401)
@@ -117,9 +121,22 @@ async def save_record(
 ):
     validation = await user_manger.validate(token)
     if (validation):
-        user_manger.save(token,data.model_dump())
+        await user_manger.save_record(token,data)
         response = Response(status_code=200)
         return response
+    else:
+        raise HTTPException(status_code=401)
+
+@app.post('/delete_saved',tags=['Record'],responses=unauthorized_resonse)
+async def delete_record(
+    data : TranslateRecord,
+    token : str = GetToken(None)
+):
+    validation = await user_manger.validate(token)
+    if (validation):
+        await user_manger.delete_record(token,data)
+        respose = Response(status_code=200)
+        return respose
     else:
         raise HTTPException(status_code=401)
 

@@ -79,8 +79,8 @@ class TranslateRecord(TranslationResponse):
     )
     
 class GetRecordRequest(BaseModel):
-    start_from : int = Field(gt=0,lt=10000)
-    amount : int = Field(gt=0,lt=10000)
+    start_from : int = Field(gt=-1,lt=10000)
+    amount : int = Field(gt=-1,lt=10000)
     
 class BaseUser(BaseModel):
     type_name : str = 'Base'

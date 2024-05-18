@@ -46,3 +46,25 @@ class JSONDatabase(Handler):
         self._save()
     def get_translation_saved(self, user_token: str) -> list[TranslateRecord]:
         return self.get_user({'token' : user_token}).saved
+    def delete_translation_history(self, token: str, record: TranslateRecord) -> None:
+        user = self.get_user({'token' : token})
+        while (True):
+            complete = True
+            for user_record in user.history:
+                if (user_record == record):
+                    user.history.remove(user_record)
+                    complete = False
+            if (complete):
+                break
+        self._save()
+    def delete_translation_saved(self, token: str, record: TranslateRecord) -> None:
+        user = self.get_user({'token' : token})
+        while (True):
+            complete = True
+            for user_record in user.saved:
+                if (user_record == record):
+                    user.saved.remove(user_record)
+                    complete = False
+            if (complete):
+                break
+        self._save()
