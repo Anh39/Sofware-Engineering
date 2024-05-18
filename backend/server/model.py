@@ -64,8 +64,19 @@ class TranslationResponse(BaseModel):
         default='Google'
     ) 
     
-class TranslateRecord(TranslationRequest,TranslationResponse):
-    pass
+class TranslateRecord(TranslationResponse):
+    from_language : str = Field(
+        min_length=2,
+        max_length=8
+    )
+    to_language : str = Field(
+        min_length=2,
+        max_length=8
+    )
+    from_content : str = Field(
+        # min_length=1,
+        max_length=5000
+    )
     
 class GetRecordRequest(BaseModel):
     start_from : int = Field(gt=0,lt=10000)
