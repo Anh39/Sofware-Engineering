@@ -11,12 +11,12 @@ export const login = async (options) => {
 }
 
 export const getHistory = async (options) => {
-    const result = await post('history',options);
+    const result = await get('history?start_from=0&amount=10');
     return result;
 }
 
 export const getSaved = async (options) => {
-    const result = await post('saved',options);
+    const result = await get('saved');
     return result;
 }
 
