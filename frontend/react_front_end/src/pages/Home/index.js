@@ -1,12 +1,11 @@
 import { Button, Col, Flex, Row, Select } from "antd";
-import { ZhihuOutlined, PaperClipOutlined, SwapOutlined, SoundOutlined, CopyOutlined, StarOutlined, StarFilled } from "@ant-design/icons";
+import { SwapOutlined, SoundOutlined, CopyOutlined, StarOutlined, StarFilled } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import "../../language";
 import { language } from "../../language";
 import TextArea from "antd/es/input/TextArea";
 import { getCookie, setCookie } from "../../helpers/cookie";
-import { translateTextServer,entry} from "../../Services/userService";
+import { translateTextServer, entry } from "../../Services/userService";
 
 async function init() {
     const response = await entry();
@@ -15,7 +14,7 @@ async function init() {
         // setCookie("id", data.id, 1);
         // setCookie("username", data.username, 1);
         // setCookie("email", data.email, 1);
-        setCookie("token", data.token, {path:'/'});
+        setCookie("token", data.token, { path: '/' });
         //document.cookie = `token=${data.token};path=/;`
     } else {
         console.log('Entry Error');
@@ -38,12 +37,7 @@ function Home() {
         value: key,
     }));
 
-    const [selectedButton, setSelectedButton] = useState("");
     const [isSaved, setIsSaved] = useState(false);
-
-    const handleClick = (buttonType) => {
-        setSelectedButton(buttonType);
-    }
 
     const translateText = async (text) => {
         // const apiUrl = `https://api.mymemory.translated.net/get?q=${text}&langpair=${FromLang.label}|${ToLang.label}`;
@@ -54,16 +48,16 @@ function Home() {
         // }
         // const apiUrl = `https://api.mymemory.translated.net/get?q=${text}&langpair=${FromLang.label}|${ToLang.label}`;
         let mapping = {
-            'English' : 'en-GB',
-            'Vietnamese' : 'vi-VN'
+            'English': 'en-GB',
+            'Vietnamese': 'vi-VN'
         }
         const options = {
-            from_language : mapping[FromLang.label],
-            to_language : mapping[ToLang.label],
-            from_content : text,
-            engine : 'auto'
+            from_language: mapping[FromLang.label],
+            to_language: mapping[ToLang.label],
+            from_content: text,
+            engine: 'auto'
         }
-        console.log('Cookie : ',document.cookie);
+        console.log('Cookie : ', document.cookie);
         const response = await translateTextServer(options);
         if (response.ok) {
             const data = await response.json();
@@ -131,15 +125,6 @@ function Home() {
 
     return (
         <>
-            <Flex className="trans__type" gap="large">
-                <Button className={`trans__type--button ${selectedButton === "text" ? "selected" : ""}`} onClick={() => handleClick("text")} >
-                    <Link to="/"><ZhihuOutlined /> Dịch văn bản</Link>
-                </Button>
-                <Button className={`trans__type--button ${selectedButton === "document" ? "selected" : ""}`} onClick={() => handleClick("document")} >
-                    <Link to="/docs"><PaperClipOutlined /> Dịch tài liệu</Link>
-                </Button>
-            </Flex>
-
             <Flex justify="center">
                 <Select
                     onChange={handleChangeFromLang}

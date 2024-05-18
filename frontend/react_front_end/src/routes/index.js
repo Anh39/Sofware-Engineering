@@ -3,8 +3,7 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Logout from "../pages/Logout";
 import Register from "../pages/Register";
-import SavedText from "../pages/SavedText";
-import TransDocs from "../pages/TransDocs";
+import ResetPassword from "../pages/ResetPassword";
 
 export const routes = [
     // Public
@@ -14,13 +13,7 @@ export const routes = [
         children: [
             {
                 path: "/",
-                element: <Home />,
-                children: [
-                    {
-                        path: "/docs",
-                        element: <TransDocs />
-                    }
-                ]
+                element: <Home />
             },
             {
                 path: "/login",
@@ -31,8 +24,8 @@ export const routes = [
                 element: <Register />
             },
             {
-                path: "/saved",
-                element: <SavedText />
+                path: "/resetpassword",
+                element: <ResetPassword />
             },
             {
                 path: "/logout",
