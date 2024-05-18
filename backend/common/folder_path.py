@@ -4,7 +4,7 @@ join = os.path.join
 _project_path = os.getcwd()
 
 config = os.path.join(_project_path,'config.json')
-apikey = os.path.join(_project_path,'apikey.json')
+apikey = os.path.join(_project_path,'backend/common/apikey.json')
 
 class backend:
     """Path(Đương dẫn) cho các thư mục, tệp trong thư mục backend
