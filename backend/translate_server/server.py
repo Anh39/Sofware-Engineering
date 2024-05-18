@@ -13,11 +13,21 @@ async def init():
     models = {
         'google' : GooglePlaywrightAPI(),
         'mymemory' : MyMemoryAPI(),
-        'gpt3.5' : OpenAIAPI() 
+        'gpt3.5' : OpenAIAPI() ,
+        'gpt4' : OpenAIAPI4()
     }
+    unavailable_models = []
     for key in models:
         model = models[key]
-        await model.start()
+        heathy = await model.start()
+        if (not heathy):
+            unavailable_models.append(key)
+            print(key,"not available")
+    for key in unavailable_models:
+        models.pop(key)
+    if (len(models) == 0):
+        print('NO MODEL AVAILABLE')
+        raise Exception
 
 model_not_found_resonse = {401 : {"model" : str, "description" : "Model not found"}}
 @app.get("/")
@@ -34,7 +44,12 @@ async def translate_test(
 ) -> TranslationResponse:
     engine = data.engine
     if (data.engine == 'auto'):
-        engine = 'mymemory'
+        if ('mymemory' in models):
+            engine = 'mymemory'
+        else:
+            for key in models:
+                engine = key
+                break
     if (engine in models):
         result = await models[engine].translate(
             content = data.from_content,
