@@ -1,13 +1,12 @@
 from fastapi import FastAPI,Request,Response,HTTPException,Query,Cookie,Header
 from backend.server.model import *
 from backend.common import common
-from backend.server.manager import Manager
-from backend.translate_server.translator_api import *
+from backend.translate_server.translator_server_api import *
 import uvicorn
 
 app = FastAPI()
 
-models = {}
+models : dict[str,BaseAPI] = {}
 
 async def init():
     global models
