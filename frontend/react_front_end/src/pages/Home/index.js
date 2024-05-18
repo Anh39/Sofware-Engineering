@@ -6,10 +6,10 @@ import "../../language";
 import { language } from "../../language";
 import TextArea from "antd/es/input/TextArea";
 import { getCookie, setCookie } from "../../helpers/cookie";
-import { translateTextServer,guestEntry } from "../../Services/userService";
+import { translateTextServer,entry} from "../../Services/userService";
 
 async function init() {
-    const response = await guestEntry();
+    const response = await entry();
     const data = await response.json();
     if (data.success === true) {
         // setCookie("id", data.id, 1);
