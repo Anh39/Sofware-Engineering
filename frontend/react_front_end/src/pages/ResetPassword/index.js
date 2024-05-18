@@ -1,4 +1,4 @@
-import { Button, Card, Flex, Form, Input, Row, message} from "antd";
+import { Button, Card, Col, Flex, Form, Input, Row, message } from "antd";
 
 function ResetPassword() {
     const rules = [
@@ -12,7 +12,7 @@ function ResetPassword() {
         console.log(e);
         const { username, oldPassword, newPassword, repeateNewPassword } = e;
 
-        if (newPassword!== repeateNewPassword) {
+        if (newPassword !== repeateNewPassword) {
             message.error("Mật khẩu mới và viết lại mật khẩu mới không khớp");
             return;
         }
@@ -41,27 +41,29 @@ function ResetPassword() {
         <>
             <Flex justify="center">
                 <Row gutter={[20, 20]}>
-                    <Card title="Đặt lại mật khẩu">
-                        <Form onFinish={onFinish}>
-                            <Form.Item label="username" name="username" rules={rules} >
-                                <Input />
-                            </Form.Item>
-                            <Form.Item label="Mật khẩu cũ" name="oldPassword" rules={rules} >
-                                <Input.Password />
-                            </Form.Item>
-                            <Form.Item label="Mật khẩu mới" name="newPassword" rules={rules} >
-                                <Input.Password />
-                            </Form.Item>
-                            <Form.Item label="Viết lại mật khẩu mới" name="repeateNewPassword" rules={rules} >
-                                <Input.Password />
-                            </Form.Item>
-                            <Form.Item>
-                                <Button type="primary" htmlType="submit">
-                                    Đặt lại mật khẩu
-                                </Button>
-                            </Form.Item>
-                        </Form>
-                    </Card>
+                    <Col span={12}>
+                        <Card title="Đặt lại mật khẩu">
+                            <Form onFinish={onFinish}>
+                                <Form.Item label="username" name="username" rules={rules} >
+                                    <Input />
+                                </Form.Item>
+                                <Form.Item label="Mật khẩu cũ" name="oldPassword" rules={rules} >
+                                    <Input.Password />
+                                </Form.Item>
+                                <Form.Item label="Mật khẩu mới" name="newPassword" rules={rules} >
+                                    <Input.Password />
+                                </Form.Item>
+                                <Form.Item label="Viết lại mật khẩu mới" name="repeateNewPassword" rules={rules} >
+                                    <Input.Password />
+                                </Form.Item>
+                                <Form.Item>
+                                    <Button type="primary" htmlType="submit">
+                                        Đặt lại mật khẩu
+                                    </Button>
+                                </Form.Item>
+                            </Form>
+                        </Card>
+                    </Col>
                 </Row>
             </Flex>
         </>
