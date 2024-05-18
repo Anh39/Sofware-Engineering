@@ -8,13 +8,18 @@ import tiktoken
 from enum import Enum
 from backend.common import folder_path
 
-with open(folder_path.apikey,'r') as file:
-    apikey = json.loads(file.read())
-
+try:
+    with open(folder_path.apikey,'r') as file:
+        apikey = json.loads(file.read())
+except:
+    print('OpenAI api key not found')
+    apikey = {'openai' : None}
+        
 class BaseAPI:
     name = 'Base'
     async def start(self):
         print('Engine {} started.'.format(self.name))
+        return True
     async def stop(self):
         print('Engine {} stopped.'.format(self.name))
     @abstractmethod
@@ -51,23 +56,28 @@ class GooglePlaywrightAPI(BaseAPI):
     async def start(self):
         await self.handler.init()
         await super().start()
+        return True
     async def translate(self,content : str,from_language : str = 'en-US',to_language : str = 'vi-VN'):
         result = await self.handler.translate(content,from_language[:2],to_language[:2])
         return result
-            
-class gpt_model(Enum):
-        gpt35turbo = 'gpt-3.5-turbo-1106'
-        gpt4turbo = 'gpt-4-turbo-preview'        
+                 
 class OpenAIAPI(BaseAPI):
+    name = 'GPT3.5'
     INIT_TOKEN = 3
     MESSAGE_TOKEN = 4
     ENCODER_NAME = 'cl100k_base'
     def __init__(self) -> None:
         self.encoder = tiktoken.get_encoding(self.ENCODER_NAME)
-        self.client = AsyncOpenAI(
-            api_key=apikey['openai']
-        )
+        self.client : AsyncOpenAI = None
         self.model = 'gpt-3.5-turbo-1106'
+    async def start(self):
+        await super().start()
+        if (apikey['openai'] != None):
+            self.client = AsyncOpenAI (
+                api_key=apikey['openai']
+            )
+            return True
+        return False
     async def translate(self,content : str,from_language : str = 'en-US',to_language : str = 'vi-VN'):
         stripped = content.strip()
         if (len(stripped) < 1):
@@ -95,3 +105,9 @@ class OpenAIAPI(BaseAPI):
         result = json.loads(result)
         result = result['Translation']
         return result
+    
+class OpenAIAPI4(OpenAIAPI):
+    name = 'GPT4'
+    def __init__(self) -> None:
+        super().__init__()
+        self.model = 'gpt-4-turbo-preview'
