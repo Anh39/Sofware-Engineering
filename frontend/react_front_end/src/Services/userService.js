@@ -1,12 +1,32 @@
-import { get, post } from "../utils/request";
+import { get, patch, post } from "../utils/request";
 
-export const login = async (username, password) => {
-  const result = await get(`users?username=${username}&password=${password}`);
-  return result;
+export const guestEntry = async () => {
+    const result = await post('guest');
+    return result
+}
+
+export const login = async (options) => {
+    const result = await post('login',options);
+    return result;
+}
+
+export const getHistory = async (options) => {
+    const result = await post('history',options);
+    return result;
+}
+
+export const getSaved = async (options) => {
+    const result = await post('saved',options);
+    return result;
+}
+
+export const saveRecord = async (options) => {
+    const result = await patch('save',options);
+    return result;
 }
 
 export const register = async (options) => {
-    const result = await post("users", options);
+    const result = await post("register", options);
     return result;
 }
 
@@ -16,6 +36,6 @@ export const checkExists = async (key, value) => {
 }
 
 export const translateTextServer = async (options) => {
-    const result = await post('/translate/text', options);
+    const result = await post('translate/text', options);
     return result;
 }

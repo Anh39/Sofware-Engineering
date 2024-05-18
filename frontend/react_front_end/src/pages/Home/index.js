@@ -5,8 +5,24 @@ import { Link } from "react-router-dom";
 import "../../language";
 import { language } from "../../language";
 import TextArea from "antd/es/input/TextArea";
-import { getCookie } from "../../helpers/cookie";
-import { translateTextServer } from "../../Services/userService";
+import { getCookie, setCookie } from "../../helpers/cookie";
+import { translateTextServer,guestEntry } from "../../Services/userService";
+
+async function init() {
+    const response = await guestEntry();
+    const data = await response.json();
+    if (data.success === true) {
+        // setCookie("id", data.id, 1);
+        // setCookie("username", data.username, 1);
+        // setCookie("email", data.email, 1);
+        setCookie("token", data.token, {path:'/'});
+        //document.cookie = `token=${data.token};path=/;`
+    } else {
+        console.log('Entry Error');
+    }
+}
+
+await init();
 
 function Home() {
     const token = getCookie("token");
@@ -44,13 +60,14 @@ function Home() {
         const options = {
             from_language : mapping[FromLang.label],
             to_language : mapping[ToLang.label],
-            content : text
+            from_content : text,
+            engine : 'auto'
         }
         console.log('Cookie : ',document.cookie);
         const response = await translateTextServer(options);
         if (response.ok) {
             const data = await response.json();
-            setTranslatedText(data['text']);
+            setTranslatedText(data.to_content);
         } else {
             try {
                 setTranslatedText(response.text());

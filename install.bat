@@ -9,4 +9,6 @@ pip install aiohttp-apispec
 pip install playwright
 pip install openai
 pip install tiktoken
+pip install fastapi
+pip install uvicorn
 playwright install
