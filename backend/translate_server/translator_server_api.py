@@ -2,26 +2,34 @@ from abc import abstractmethod
 import json
 import aiohttp,asyncio
 from urllib.parse import urlencode,quote
-from backend.translate_backend.playwright_handler import Handler
+from backend.translate_server.playwright_handler import Handler
 from openai import AsyncOpenAI
 import tiktoken
 from enum import Enum
-from backend import folder_path
+from backend.common import folder_path
 
 with open(folder_path.apikey,'r') as file:
     apikey = json.loads(file.read())
 
-
-class MyMemoryAPI:
+class BaseAPI:
+    name = 'Base'
+    async def start(self):
+        print('Engine {} started.'.format(self.name))
+    async def stop(self):
+        print('Engine {} stopped.'.format(self.name))
+    @abstractmethod
+    async def translate(self,content : str,from_language : str = 'en-US',to_language :str = 'vi-VN'):
+        return 'Base model'
+class MyMemoryAPI(BaseAPI):
     name = 'MyMemory'
     base_url = 'https://api.mymemory.translated.net'
     def __init__(self,email : str = None) -> None:
         self.session = aiohttp.ClientSession(self.base_url)
         self.email = email
-    async def close(self):
+    async def stop(self):
         await self.session.close()
-    async def translate(self,content : str,from_lang : str = 'en',to_lang : str = 'vi'):
-        params = {'q' : content,'langpair' : '{}|{}'.format(from_lang,to_lang)}
+    async def translate(self,content : str,from_language : str = 'en-US',to_language : str = 'vi-VN'):
+        params = {'q' : content,'langpair' : '{}|{}'.format(from_language,to_language)}
         if (self.email != None):
             params['de'] = self.email
         async with self.session.get(url='/get',params=params) as response:
@@ -35,21 +43,22 @@ class MyMemoryAPI:
                     return matches[0]['translation']
                 else:
                     return 'ERROR'
-                
-class GooglePlaywrightAPI:
+                       
+class GooglePlaywrightAPI(BaseAPI):
     name = 'Goggle Playwright'
     def __init__(self) -> None:
         self.handler = Handler()
-    async def init(self):
+    async def start(self):
         await self.handler.init()
-    async def translate(self,content : str,from_lang : str = 'en',to_lang : str = 'vi'):
-        result = await self.handler.translate(content,from_lang,to_lang)
+        await super().start()
+    async def translate(self,content : str,from_language : str = 'en-US',to_language : str = 'vi-VN'):
+        result = await self.handler.translate(content,from_language[:2],to_language[:2])
         return result
             
 class gpt_model(Enum):
         gpt35turbo = 'gpt-3.5-turbo-1106'
         gpt4turbo = 'gpt-4-turbo-preview'        
-class OpenAIAPI:
+class OpenAIAPI(BaseAPI):
     INIT_TOKEN = 3
     MESSAGE_TOKEN = 4
     ENCODER_NAME = 'cl100k_base'
@@ -59,7 +68,7 @@ class OpenAIAPI:
             api_key=apikey['openai']
         )
         self.model = 'gpt-3.5-turbo-1106'
-    async def translate(self,content : str,from_lang : str = 'en',to_lang : str = 'vi'):
+    async def translate(self,content : str,from_language : str = 'en-US',to_language : str = 'vi-VN'):
         stripped = content.strip()
         if (len(stripped) < 1):
             return ''
@@ -72,7 +81,7 @@ class OpenAIAPI:
                     },
                     {
                         'role' : 'user',
-                        'content' : 'Translate [Content] from "{}" to "{}". [Content] = "{}"'.format(from_lang,to_lang,content),
+                        'content' : 'Translate [Content] from "{}" to "{}". [Content] = "{}"'.format(from_language,to_language,content),
                     }
                 ],
                 model=self.model

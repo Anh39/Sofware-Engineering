@@ -3,10 +3,12 @@
         "host" : "127.0.0.1",
         "port" : 8080
     },
-    "translator" : {
-        "backend" : "mymemory_aiohttp",
-        "list" : [
-            "google_playwright","mymemory_aiohttp","openai_chatgpt"
-        ]
+    "translate_server" : {
+        "host" : "127.0.0.1",
+        "port" : 8001
+    },
+    "database" : {
+        "host" : "127.0.0.1",
+        "port" : 8002
     }
 }

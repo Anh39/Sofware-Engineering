@@ -22,10 +22,13 @@ function Register() {
         const response = await register(options);
         console.log(console);
         if (response.ok) {
-            navigate("/login");
-        } else {
-            alert("Tài khoản hoặc email đã tồn tại");
+            const data = await response.json();
+            if (data.success === true) {
+                navigate("/login");
+                return
+            }
         }
+        alert("Tài khoản hoặc email đã tồn tại");
 
         // }
     }

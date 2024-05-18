@@ -18,21 +18,27 @@ function Login() {
     ];
 
     const onFinish = async (e) => {
-        const response = await login(e.username, e.password);
-        console.log(response);
-        console.log('Cookie : ',document.cookie);
+        const options = {
+            username : e.username,
+            password : e.password
+        }
+        const response = await login(options);
         if (response.ok) {
             const data = await response.json();
-            setCookie("id", data.id, 1);
-            setCookie("username", data.username, 1);
-            setCookie("email", data.email, 1);
-            setCookie("uuid", data.token, 1);
-            
-            dispatch(checkLogin(true));
-            navigate("/");
-        } else {
-            alert("Login failed");
+            if (data.success === true) {
+                // setCookie("id", data.id, 1);
+                // setCookie("username", data.username, 1);
+                // setCookie("email", data.email, 1);
+                setCookie("token", data.token, {path:'/'});
+                //document.cookie = `token=${data.token};path=/;`
+                
+                dispatch(checkLogin(true));
+                navigate("/");
+                return
+            }
         }
+        alert("Login failed");
+
     }
     return (
         <>
