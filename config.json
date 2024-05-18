@@ -1,14 +1,14 @@
 {
     "server" : {
         "host" : "127.0.0.1",
-        "port" : 8080
+        "port" : 8081
     },
     "translate_server" : {
         "host" : "127.0.0.1",
-        "port" : 8001
+        "port" : 8003
     },
     "database" : {
         "host" : "127.0.0.1",
-        "port" : 8002
+        "port" : 8004
     }
 }

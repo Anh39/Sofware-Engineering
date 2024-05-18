@@ -39,33 +39,31 @@ function ResetPassword() {
     }
     return (
         <>
-            <Flex justify="center">
-                <Row gutter={[20, 20]}>
-                    <Col span={12}>
-                        <Card title="Đặt lại mật khẩu">
-                            <Form onFinish={onFinish}>
-                                <Form.Item label="username" name="username" rules={rules} >
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item label="Mật khẩu cũ" name="oldPassword" rules={rules} >
-                                    <Input.Password />
-                                </Form.Item>
-                                <Form.Item label="Mật khẩu mới" name="newPassword" rules={rules} >
-                                    <Input.Password />
-                                </Form.Item>
-                                <Form.Item label="Viết lại mật khẩu mới" name="repeateNewPassword" rules={rules} >
-                                    <Input.Password />
-                                </Form.Item>
-                                <Form.Item>
-                                    <Button type="primary" htmlType="submit">
-                                        Đặt lại mật khẩu
-                                    </Button>
-                                </Form.Item>
-                            </Form>
-                        </Card>
-                    </Col>
-                </Row>
-            </Flex>
+            <Row justify="center">
+                <Col span={12}>
+                    <Card title="Đặt lại mật khẩu">
+                        <Form onFinish={onFinish}>
+                            <Form.Item label="username" name="username" rules={rules} >
+                                <Input />
+                            </Form.Item>
+                            <Form.Item label="Mật khẩu cũ" name="oldPassword" rules={rules} >
+                                <Input.Password />
+                            </Form.Item>
+                            <Form.Item label="Mật khẩu mới" name="newPassword" rules={rules} >
+                                <Input.Password />
+                            </Form.Item>
+                            <Form.Item label="Viết lại mật khẩu mới" name="repeateNewPassword" rules={rules} >
+                                <Input.Password />
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="submit">
+                                    Đặt lại mật khẩu
+                                </Button>
+                            </Form.Item>
+                        </Form>
+                    </Card>
+                </Col>
+            </Row>
         </>
     )
 }

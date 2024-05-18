@@ -19,8 +19,8 @@ function Login() {
 
     const onFinish = async (e) => {
         const options = {
-            username : e.username,
-            password : e.password
+            username: e.username,
+            password: e.password
         }
         const response = await login(options);
         if (response.ok) {
@@ -29,9 +29,9 @@ function Login() {
                 // setCookie("id", data.id, 1);
                 // setCookie("username", data.username, 1);
                 // setCookie("email", data.email, 1);
-                setCookie("token", data.token, {path:'/'});
+                setCookie("token", data.token, 1);
                 //document.cookie = `token=${data.token};path=/;`
-                
+
                 dispatch(checkLogin(true));
                 navigate("/");
                 return
