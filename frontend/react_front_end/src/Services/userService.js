@@ -14,3 +14,8 @@ export const checkExists = async (key, value) => {
     const result = await get(`users?${key}=${value}`);
     return result;
 }
+
+export const translateTextServer = async (options) => {
+    const result = await post('/translate/text', options);
+    return result;
+}

@@ -1,0 +1,44 @@
+#user {
+    height: 75%;
+    max-width: fit-content;
+    border: 2px hsl(0, 0%, 70%);
+    border-radius: 128px;
+    background-color: hsl(0, 0%, 95%);
+    overflow: hidden;
+}
+#user:hover {
+    background-color: hsl(0, 0%, 85%);
+}
+#user img{
+    width: auto;
+    height: auto;
+}
+#user_container {
+    border: 2px solid hsl(0, 0%, 80%);
+    border-radius: 8px;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    margin-right: 5%;
+    top: 10px;
+    right: 5px;
+    width: 250px;
+    height: auto;
+    background-color: hsl(0, 0%, 90%);
+    padding: 5px;
+}
+
+#user_container span {
+    width: 90%;
+    margin-top: 5px;
+    margin-left: 5%;
+    margin-bottom: 5px;
+    height: auto;
+    font-size: x-large;
+    border-bottom: 1px solid black;
+
+}
+#user_container span:hover {
+    background-color: hsl(0, 0%, 70%);
+    border-radius: 5px;
+}
