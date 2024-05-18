@@ -1,7 +1,7 @@
 import { Button, Drawer, Dropdown } from "antd";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getHistory } from "../../Services/userService";
+import { getHistory, getSaved } from "../../Services/userService";
 
 function Personal() {
     const [opensHistory, setOpenHistory] = useState(false);
@@ -47,6 +47,12 @@ function Personal() {
             const response = await getHistory();
             if (response.ok) {
                 const data = await response.json();
+                console.log(data);
+            }
+
+            const resSaved = await getSaved();
+            if (resSaved.ok) {
+                const data = await resSaved.json();
                 console.log(data);
             }
         }
