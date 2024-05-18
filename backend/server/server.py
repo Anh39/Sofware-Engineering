@@ -13,6 +13,7 @@ translate_api : TranslateAPI = None
 async def init():
     global user_manger,translate_api
     user_manger = UserController()
+    user_manger.start()
     translate_api = TranslateAPI()
     translate_api.start()
 app = FastAPI()
@@ -33,10 +34,15 @@ auto_set_token = True
 async def root():
     return {"message" : "Konnichiwa Sekai!"}
 
-@app.post('/guest',tags=['Authentication'])
-async def guest_entry() -> LoginResponse:
+@app.post('/entry',tags=['Authentication'])
+async def guest_entry(
+    token : str = GetToken(None)
+) -> LoginResponse:
     if (True):
-        token = user_manger.add_guest()
+        if (token != None):
+            validate = await user_manger.guest_validate(token)
+            if (not validate):
+                token = await user_manger.add_guest()
         response = LoginResponse(success=True,token=token)
         if (auto_set_token):
             response = Response(content=response.model_dump_json())
@@ -49,10 +55,7 @@ async def guest_entry() -> LoginResponse:
 async def users_login(
     data : LoginRequest
 ) -> LoginResponse:
-    token = user_manger.login(
-        username=data.username,
-        password=data.password
-    )
+    token = await user_manger.login(data)
     if (token):
         response = LoginResponse(success=True,token=token)
         if (auto_set_token):
@@ -87,7 +90,7 @@ async def get_history(
     amount : int = Query(gt=-1,lt=1000),
     token : str = GetToken(None)
 ) -> list[TranslateRecord]:
-    validation = user_manger.guest_validate(token)
+    validation = await user_manger.guest_validate(token)
     if (validation):
         result = user_manger.get_history(token,start_from,amount)
         return result
@@ -100,7 +103,7 @@ async def get_saved(
     amount : int = Query(gt=-1,lt=1000),
     token : str = GetToken(None)
 ) -> list[TranslateRecord]:
-    validation = user_manger.validate(token)
+    validation = await user_manger.validate(token)
     if (validation):
         result = user_manger.get_saved(token,start_from,amount)
         return result
@@ -109,11 +112,10 @@ async def get_saved(
     
 @app.post('/save',tags=['Record'],responses=unauthorized_resonse)
 async def save_record(
-    request : Request,
     data : TranslateRecord,
     token : str = GetToken(None)
 ):
-    validation = user_manger.validate(token)
+    validation = await user_manger.validate(token)
     if (validation):
         user_manger.save(token,data.model_dump())
         response = Response(status_code=200)
@@ -126,11 +128,19 @@ async def translate_test(
     data : TranslationRequest,
     token : str = GetToken(None)
 ) -> TranslationResponse:
-    validation = user_manger.guest_validate(token)
+    validation = await user_manger.guest_validate(token)
     if (validation):
         result = await translate_api.translate_test(data)
         if (isinstance(result,HTTPException)):
             raise result
+        record = TranslateRecord(
+            from_content=data.from_content,
+            to_content=result.to_content,
+            from_language=data.from_language,
+            to_language=data.to_language,
+            engine_used=result.engine_used
+        )
+        await user_manger.add_history(token,record)
         response = result
         return response
     else:

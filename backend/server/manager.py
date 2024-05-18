@@ -6,6 +6,7 @@ import hashlib
 from typing import Dict
 from backend.server.model import RegistedUser,Guest,TranslateRecord,LoginRequest,RegisterRequest
 from backend.database.api import DatabaseAPI
+from fastapi import HTTPException
 
 class UserController:
     DYNAMIC_TOKEN = False
@@ -13,39 +14,42 @@ class UserController:
     database_api : DatabaseAPI = DatabaseAPI()
     def start(self):
         self.database_api.start()
-    def _get_user_by_username(self,username : str) -> RegistedUser:
-        result = self.database_api.user(action='get',search={'username' : username})
+    async def _get_user_by_username(self,username : str) -> RegistedUser:
+        result = await self.database_api.user(action='get',search={'username' : username})
         return result
-    def _get_user_by_token(self,token : str) -> Guest | RegistedUser:
-        result = self.database_api.user(action='get',search={'token' : token})
+    async def _get_user_by_token(self,token : str) -> Guest | RegistedUser:
+        result = await self.database_api.user(action='get',search={'token' : token})
         return result
-    def _get_user_by_email(self,email : str) -> RegistedUser:
-        result = self.database_api.user(action='get',search={'email' : email})
+    async def _get_user_by_email(self,email : str) -> RegistedUser:
+        result = await self.database_api.user(action='get',search={'email' : email})
         return result
     def _generate_token(self) -> str:
         return str(uuid.uuid4())
-    def _update_user_token(self,user : RegistedUser,new_token):
+    async def _update_user_token(self,user : RegistedUser,new_token):
         user.token = new_token
-    def _add_registerd_user(self,user : RegistedUser):
-        self.database_api.user(action='add',user=user)
-    def _add_guest(self,user : Guest):
-        self.database_api.user(action='add',user=user)
-    def _delete_user(self,token : str):
-        self.database_api.user(action='delete',token=token)
-    def add_guest(self) -> str:
+    async def _add_registerd_user(self,user : RegistedUser):
+        await self.database_api.user(action='add',user=user)
+    async def _add_guest(self,user : Guest):
+        await self.database_api.user(action='add',user=user)
+    async def _delete_user(self,token : str):
+        await self.database_api.user(action='delete',token=token)
+    async def add_guest(self) -> str:
         user = Guest(token=self._generate_token())
+        await self._add_guest(user)
         return user.token
-    def login(self,request : LoginRequest) -> str | None:
-        user = self._get_user_by_username(request.username)
+    async def login(self,request : LoginRequest) -> str | None:
+        user = await self._get_user_by_username(request.username)
+        if (isinstance(user,HTTPException)):
+            raise HTTPException(status_code=404)
         if (user.password == request.password):
             if (self.DYNAMIC_TOKEN):
-                self._update_user_token(user,self._generate_token())
+                await self._update_user_token(user,self._generate_token())
             return user.token
         return None
-    def register(self,reqest : RegisterRequest,token : str) -> str | None:
-        user = self._get_user_by_username(reqest.username)
+    async def register(self,reqest : RegisterRequest,token : str) -> str | None:
+        user = await self._get_user_by_username(reqest.username)
         if (user == None):
-            user = self._get_user_by_email(reqest.email)
+            user = await self._get_user_by_email(reqest.email)
             if (user == None):
                 user = RegistedUser(
                     token = self._generate_token(),
@@ -54,13 +58,20 @@ class UserController:
                     username = reqest.username
                 )
                 if (token != None):
-                    user.history = self._get_user_by_token(token)
-                    self._delete_user(token)
-                self._add_registerd_user(user)
+                    user.history = await self._get_user_by_token(token)
+                    await self._delete_user(token)
+                await self._add_registerd_user(user)
                 return user.token
         return None
-    
-                    
+    async def validate(self,token : str) -> bool:
+        user = await self._get_user_by_token(token)
+        return user != None and user.type_name == 'Registed'
+    async def guest_validate(self,token : str) -> bool:
+        user = await self._get_user_by_token(token)
+        return user != None
+    async def add_history(self,token : str,record : TranslateRecord)-> RegistedUser | Guest:
+        await self.database_api.history(action='add',token=token,record=record)
+
 
 # class Manager:
 #     def __init__(self) -> None:

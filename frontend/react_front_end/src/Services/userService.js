@@ -1,8 +1,8 @@
 import { get, patch, post } from "../utils/request";
 
-export const guestEntry = async () => {
-    const result = await post('guest');
-    return result
+export const entry = async () => {
+    const result = await post('entry');
+    return result;
 }
 
 export const login = async (options) => {

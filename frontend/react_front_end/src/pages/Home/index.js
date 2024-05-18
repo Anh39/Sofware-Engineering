@@ -5,16 +5,16 @@ import "../../language";
 import { language } from "../../language";
 import TextArea from "antd/es/input/TextArea";
 import { getCookie, setCookie } from "../../helpers/cookie";
-import { translateTextServer,guestEntry } from "../../Services/userService";
+import { translateTextServer, entry } from "../../Services/userService";
 
 async function init() {
-    const response = await guestEntry();
+    const response = await entry();
     const data = await response.json();
     if (data.success === true) {
         // setCookie("id", data.id, 1);
         // setCookie("username", data.username, 1);
         // setCookie("email", data.email, 1);
-        setCookie("token", data.token, {path:'/'});
+        setCookie("token", data.token, { path: '/' });
         //document.cookie = `token=${data.token};path=/;`
     } else {
         console.log('Entry Error');
@@ -41,16 +41,16 @@ function Home() {
 
     const translateText = async (text) => {
         let mapping = {
-            'English' : 'en-GB',
-            'Vietnamese' : 'vi-VN'
+            'English': 'en-GB',
+            'Vietnamese': 'vi-VN'
         }
         const options = {
-            from_language : mapping[FromLang.label],
-            to_language : mapping[ToLang.label],
-            from_content : text,
-            engine : 'auto'
+            from_language: mapping[FromLang.label],
+            to_language: mapping[ToLang.label],
+            from_content: text,
+            engine: 'auto'
         }
-        console.log('Cookie : ',document.cookie);
+        console.log('Cookie : ', document.cookie);
         const response = await translateTextServer(options);
         if (response.ok) {
             const data = await response.json();
