@@ -1,6 +1,5 @@
 from database.databases import *
-from backend import folder_path
-
+from backend.common import folder_path
 
 class TemporyDatabaseAPI:
     def __init__(self) -> None:
@@ -13,10 +12,10 @@ class TemporyDatabaseAPI:
         'email' : None
     }):
         user_type = None
-        if (input['type'] == 'RegistedUser'):
-            user_type = User_type.REGISTED
-        elif (input['type'] == 'Guest'):
-            user_type = User_type.GUEST
+        # if (input['type'] == 'RegistedUser'):
+        #     user_type = User_type.REGISTED
+        # elif (input['type'] == 'Guest'):
+        #     user_type = User_type.GUEST
         self.handler.add_user(input.get('username',None),input.get('password',None),input.get('email'),user_type)
     def add_history(self,input : dict[str,object] = {
         'type' : None,

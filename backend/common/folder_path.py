@@ -19,7 +19,10 @@ class backend:
 class database:
     path = join(_project_path,'database')
     database = join(path,'translate_database.db')
-    
+class common:
+    path = join(_project_path,'common')
+    config = join(_project_path,'config.json')
+    language = join(_project_path,'frontend','react_front_end','src','language.json')
 class frontend:
     """Path(Đương dẫn) cho các thư mục, tệp trong thư mục frontend
     """

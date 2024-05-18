@@ -1,3 +1,5 @@
-from backend import server
+# from backend import server_old
+from backend.server_controller import start
 
-server.start()
+
+start()
