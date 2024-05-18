@@ -7,7 +7,7 @@ def get_config(module_name : str = 'all'):
     mapping = {
         'all' : config_info,
         'server' : config_info['server'],
-        # 'database' : config_info['database'],
+        'database' : config_info['database'],
         'translate_server' : config_info['translate_server'],
         # 'react' : config_info['react']
     }

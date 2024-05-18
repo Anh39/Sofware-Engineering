@@ -1,19 +1,18 @@
 from fastapi import FastAPI,Request,Response,HTTPException,Query,Cookie,Header
 from backend.server.model import *
 from backend.common import common
-from backend.server.manager import Manager
+from backend.server.manager import UserController
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from backend.translate_server.api import TranslateAPI
 
 
 GetToken = Header
-user_manger : Manager = None
+user_manger : UserController = None
 translate_api : TranslateAPI = None
 async def init():
     global user_manger,translate_api
-    user_manger = Manager()
-    await user_manger.init()
+    user_manger = UserController()
     translate_api = TranslateAPI()
     translate_api.start()
 app = FastAPI()
@@ -129,8 +128,10 @@ async def translate_test(
 ) -> TranslationResponse:
     validation = user_manger.guest_validate(token)
     if (validation):
-        result = await user_manger.translate_text(token,data.model_dump())
-        response = TranslationResponse(to_content=result)
+        result = await translate_api.translate_test(data)
+        if (isinstance(result,HTTPException)):
+            raise result
+        response = result
         return response
     else:
         raise HTTPException(status_code=401)

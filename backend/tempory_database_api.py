@@ -1,9 +1,9 @@
-from database.databases import *
+from backend.database.databases import *
 from backend.common import folder_path
 
 class TemporyDatabaseAPI:
     def __init__(self) -> None:
-        self.handler = handler(folder_path.database.database)
+        self.handler = Handler(folder_path.database.database)
     def add_user(self,input : dict[str,object] = {
         'type' : None,
         'identifier' : None,
