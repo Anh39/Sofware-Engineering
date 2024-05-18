@@ -1,5 +1,4 @@
-import { Button, Drawer } from "antd";
-import { useState } from "react";
+import { Button } from "antd";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Personal from "../components/Personal";
@@ -10,16 +9,6 @@ function Header(props) {
 
     console.log(isLogin);
 
-    const [open, setOpen] = useState(false);
-
-    const showDrawer = () => {
-        setOpen(true);
-    };
-
-    const onClose = () => {
-        setOpen(false);
-    };
-
     return (
         <>
             <div className="header">
@@ -28,20 +17,9 @@ function Header(props) {
                 </div>
 
                 <div className="header__button">
-                    <div>
-                        <Personal />
-                    </div>
-                    {token && isLogin ? (
+                    {token ? (
                         <>
-                            <Button className="header__button--login" type="primary" onClick={showDrawer}>
-                                bản dịch đã lưu
-                            </Button>
-                            <Button className="header__button--register">
-                                <Link to="/logout">Đăng xuất</Link>
-                            </Button>
-                            {
-                                // đưa Personal vào thay thế 2 nút này
-                            }
+                            <Personal />
                         </>
                     ) : (
                         <>
@@ -55,10 +33,6 @@ function Header(props) {
                     )}
                 </div>
             </div>
-
-            <Drawer title="Bản dịch đã lưu" onClose={onClose} open={open}>
-                <p>Nothing</p>
-            </Drawer>
         </>
     )
 }

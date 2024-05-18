@@ -11,7 +11,7 @@ export const login = async (options) => {
 }
 
 export const getHistory = async (options) => {
-    const result = await post('history',options);
+    const result = await get('history');
     return result;
 }
 

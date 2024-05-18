@@ -1,6 +1,7 @@
 import { Button, Drawer, Dropdown } from "antd";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getHistory } from "../../Services/userService";
 
 function Personal() {
     const [opensHistory, setOpenHistory] = useState(false);
@@ -40,6 +41,17 @@ function Personal() {
             label: <Link to="/logout">Đăng xuất</Link>
         }
     ];
+
+    useEffect(() => {
+        const fetchAPI = async () => {
+            const response = await getHistory();
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+            }
+        }
+        fetchAPI();
+    }, [])
 
     return (
         <>
