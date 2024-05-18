@@ -100,7 +100,8 @@ class BaseUser(BaseModel):
         return self.history[start_:end_]
     def add_history(self,data : TranslateRecord):
         self.history.append(data)
-    
+class Id(BaseModel):
+    id : int
 class Guest(BaseUser):
     type_name : str = 'Guest'
     

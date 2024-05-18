@@ -9,3 +9,7 @@ class Token(BaseModel):
 class TokenizedUser(BaseModel):
     token : str
     user : RegistedUser | Guest
+
+class TokenizedId(BaseModel):
+    id : int
+    token : str

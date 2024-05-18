@@ -1,11 +1,11 @@
-import { Button, Col, Flex, Row, Select } from "antd";
-import { SwapOutlined, SoundOutlined, CopyOutlined, StarOutlined, StarFilled } from "@ant-design/icons";
+import { Button, Col, Flex, Row, Select, message } from "antd";
+import { SwapOutlined, SoundOutlined, CopyOutlined, StarFilled } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import "../../language";
 import { language } from "../../language";
 import TextArea from "antd/es/input/TextArea";
 import { getCookie, setCookie } from "../../helpers/cookie";
-import { translateTextServer, entry } from "../../Services/userService";
+import { translateTextServer, entry, saveRecord } from "../../Services/userService";
 
 async function init() {
     const response = await entry();
@@ -26,6 +26,8 @@ await init();
 function Home() {
     const token = getCookie("token");
 
+    const [messageApi, contextHolder] = message.useMessage();
+
     const [FromLang, setFromLang] = useState({ value: 'en-GB', label: language['en-GB'] });
     const [ToLang, setToLang] = useState({ value: 'vi-VN', label: language['vi-VN'] });
 
@@ -36,8 +38,6 @@ function Home() {
         label: language[key],
         value: key,
     }));
-
-    const [isSaved, setIsSaved] = useState(false);
 
     const translateText = async (text) => {
         let mapping = {
@@ -50,7 +50,6 @@ function Home() {
             from_content: text,
             engine: 'auto'
         }
-        console.log('Cookie : ', document.cookie);
         const response = await translateTextServer(options);
         if (response.ok) {
             const data = await response.json();
@@ -77,12 +76,10 @@ function Home() {
     }
 
     const handleChangeFromLang = (label, value) => {
-        console.log(label, value);
         setFromLang({ value: label, label: value });
     }
 
     const handleChangeToLang = (value, option) => {
-        console.log(value, option);
         setToLang({ value: option, label: option });
     }
 
@@ -104,9 +101,28 @@ function Home() {
         navigator.clipboard.writeText(translatedText);
     }
 
-    const Save = () => {
-        setIsSaved(!isSaved);
-        // lưu bản dịch
+    const Save = async () => {
+        const options = {
+            to_content: translatedText,
+            engine_used: "google",
+            from_language: FromLang.value,
+            to_language: ToLang.value,
+            from_content: inputText,
+        }
+
+        const save = await saveRecord(options);
+        console.log(save);
+        if (save) {
+            messageApi.open({
+                type: 'success',
+                content: "Lưu thành công, vào mục 'bản dịch đã lưu' để xem chi tiết"
+            });
+        } else {
+            messageApi.open({
+                type: 'error',
+                content: "Lưu thất bại"
+            });
+        }
     }
 
     useEffect(() => {
@@ -118,6 +134,7 @@ function Home() {
 
     return (
         <>
+            {contextHolder}
             <Flex justify="center">
                 <Select
                     onChange={handleChangeFromLang}
@@ -154,7 +171,7 @@ function Home() {
                             {token && translatedText !== "" ? (
                                 <>
                                     <Button shape="circle" onClick={Save}>
-                                        {isSaved ? <StarFilled /> : <StarOutlined />}
+                                        <StarFilled />
                                     </Button>
                                 </>
                             ) : (<></>)}

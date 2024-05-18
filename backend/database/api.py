@@ -124,12 +124,14 @@ class DatabaseAPI:
         
     async def saved(self,action : Literal['get','add','delete',None] = None,
                    record : TranslateRecord = None,
-                   token : str = None
+                   token : str = None,
+                   id : int = None
                    ) -> list[TranslateRecord] | HTTPException:
         try:
             data = {
                 'record' : record.model_dump() if record != None else None,
-                'token' : token
+                'token' : token,
+                'id' : id
             }
             if (action == 'get'):
                 async with self.session.get('/saved',params=json.dumps(data)) as response:

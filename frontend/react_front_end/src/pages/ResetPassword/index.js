@@ -1,6 +1,9 @@
-import { Button, Card, Col, Flex, Form, Input, Row, message } from "antd";
+import { Button, Card, Col, Form, Input, Row, message } from "antd";
+import { ChangePassword } from "../../Services/userService";
+import { useNavigate } from "react-router-dom";
 
 function ResetPassword() {
+    const navigate = useNavigate();
     const rules = [
         {
             required: true,
@@ -10,29 +13,22 @@ function ResetPassword() {
 
     const onFinish = async (e) => {
         console.log(e);
-        const { username, oldPassword, newPassword, repeateNewPassword } = e;
 
-        if (newPassword !== repeateNewPassword) {
+        if (e.newPassword !== e.repeateNewPassword) {
             message.error("Mật khẩu mới và viết lại mật khẩu mới không khớp");
             return;
         }
 
-        const response = await fetch("http://localhost:8080/api/user/reset-password", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                username,
-                oldPassword,
-                newPassword
-            })
-        });
+        const options = {
+            old_password: e.oldPassword,
+            new_password:  e.newPassword
+        }
 
-        // nên viết lại cái response
+        const response = await ChangePassword(options);
 
         if (response.ok) {
             message.success("Đặt lại mật khẩu thành công");
+            navigate("/");
         } else {
             message.error("Đặt lại mật khẩu thất bại");
         }
@@ -43,9 +39,6 @@ function ResetPassword() {
                 <Col span={12}>
                     <Card title="Đặt lại mật khẩu">
                         <Form onFinish={onFinish}>
-                            <Form.Item label="username" name="username" rules={rules} >
-                                <Input />
-                            </Form.Item>
                             <Form.Item label="Mật khẩu cũ" name="oldPassword" rules={rules} >
                                 <Input.Password />
                             </Form.Item>

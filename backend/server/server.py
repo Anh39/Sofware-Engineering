@@ -87,7 +87,7 @@ async def users_register(
     else:
         response = LoginResponse(success=False,token='')
         return response
-@app.post('/change_password',tags=['Authentication'])
+@app.patch('/change_password',tags=['Authentication'])
 async def change_password(
     data : ChangePasswordRequest,
     token : str = GetToken(None)
@@ -142,14 +142,14 @@ async def save_record(
     else:
         raise HTTPException(status_code=401)
 
-@app.post('/delete_saved',tags=['Record'],responses=unauthorized_resonse)
+@app.delete('/save',tags=['Record'],responses=unauthorized_resonse)
 async def delete_record(
-    data : TranslateRecord,
+    id : int,
     token : str = GetToken(None)
 ):
     validation = await user_manger.validate(token)
     if (validation):
-        await user_manger.delete_record(token,data)
+        await user_manger.delete_record(token,id)
         respose = Response(status_code=200)
         return respose
     else:
