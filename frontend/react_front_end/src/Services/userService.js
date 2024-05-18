@@ -1,4 +1,4 @@
-import { get, patch, post } from "../utils/request";
+import { del, get, patch, post } from "../utils/request";
 
 export const entry = async () => {
     const result = await post('entry');
@@ -15,13 +15,13 @@ export const getHistory = async (options) => {
     return result;
 }
 
-export const getSaved = async (options) => {
-    const result = await get('saved');
+export const getSaved = async () => {
+    const result = await get('saved?start_from=0&amount=10');
     return result;
 }
 
 export const saveRecord = async (options) => {
-    const result = await patch('save',options);
+    const result = await post('save', options);
     return result;
 }
 
@@ -37,5 +37,15 @@ export const checkExists = async (key, value) => {
 
 export const translateTextServer = async (options) => {
     const result = await post('translate/text', options);
+    return result;
+}
+
+export const DeleteSaved = async (id) => {
+    const result = await del(`save?id=${id}`);
+    return result;
+}
+
+export const ChangePassword = async (options) => {
+    const result = await patch('change_password', options);
     return result;
 }

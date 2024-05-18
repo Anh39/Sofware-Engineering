@@ -1,7 +1,16 @@
-.history {
+.list {
     padding: 5px;
     padding-left: 10px;
     border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.star {
+    padding-right: 10px;
+    cursor: pointer;
+    font-size: 20px;
 }
 
 .ant-drawer-body {

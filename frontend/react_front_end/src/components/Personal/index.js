@@ -1,15 +1,16 @@
 import { Button, Drawer, Dropdown } from "antd";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getHistory, getSaved } from "../../Services/userService";
+import { DeleteSaved, getHistory, getSaved } from "../../Services/userService";
 import { language } from "../../language";
-import { ArrowRightOutlined } from "@ant-design/icons";
+import { ArrowRightOutlined, StarFilled } from "@ant-design/icons";
 import "./drawer.css";
 
 function Personal() {
     const [opensHistory, setOpenHistory] = useState(false);
     const [opensSaved, setOpenSaved] = useState(false);
     const [history, setHistory] = useState([]);
+    const [savedText, setSavedText] = useState([]);
 
     const onHistory = () => {
         setOpenHistory(true);
@@ -20,7 +21,7 @@ function Personal() {
     }
 
     const onSaved = () => {
-        setOpenHistory(true);
+        setOpenSaved(true);
     }
 
     const closeSaved = () => {
@@ -46,21 +47,31 @@ function Personal() {
         }
     ];
 
+    const DeleteSave = async (id) => {
+        console.log(id);
+        const response = await DeleteSaved(id);
+        if (response.ok) {
+            setSavedText(savedText.filter(item => item.id === id));
+        }
+    }
+
     useEffect(() => {
         const fetchAPI = async () => {
             const response = await getHistory();
             if (response.ok) {
                 const data = await response.json();
-                console.log(data);
                 setHistory(data);
+            }
+
+            const responseSaved = await getSaved();
+            if (responseSaved.ok) {
+                const dataSaved = await responseSaved.json();
+                console.log(dataSaved);
+                setSavedText(dataSaved);
             }
         }
         fetchAPI();
     }, [])
-
-    history.map((value, index) => {
-        console.log(value);
-    })
 
     return (
         <>
@@ -75,25 +86,29 @@ function Personal() {
 
             <Drawer title="lịch sử dịch" open={opensHistory} onClose={closeHistory} >
                 {history.map((value, index) => (
-                    <div key={index} className="history">
+                    <div key={index} className="list">
                         <div>
-                            {language[value.from_language]} <ArrowRightOutlined /> {language[value.to_language]}
-                        </div>
-                        <div>
-                            {value.from_content}
-                        </div>
-                        <div>
-                            {value.to_content}
+                            <div>{language[value.from_language]} <ArrowRightOutlined /> {language[value.to_language]}</div>
+                            <div>{value.from_content}</div>
+                            <div>{value.to_content}</div>
                         </div>
                     </div>
                 ))}
             </Drawer>
 
             <Drawer title="Bản dịch đã lưu" open={opensSaved} onClose={closeSaved} >
-                <div>Bản dịch đã lưu</div>
-                {
-                    // bản dịch tại đây
-                }
+                {savedText.map((value, index) => (
+                    <div key={index} className="list">
+                        <div>
+                            <div>{language[value.from_language]} <ArrowRightOutlined /> {language[value.to_language]}</div>
+                            <div>{value.from_content}</div>
+                            <div>{value.to_content}</div>
+                        </div>
+                        <div className="star" onClick={() => DeleteSave(index)}>
+                            <StarFilled />
+                        </div>
+                    </div>
+                ))}
             </Drawer>
         </>
     )

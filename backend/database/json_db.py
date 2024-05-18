@@ -1,6 +1,7 @@
 from backend.database.database import Handler
 from backend.common import folder_path
 from backend.server.manager import *
+from backend.database.model import Id
 import json
 
 from backend.server.model import Guest, RegistedUser, TranslateRecord
@@ -62,14 +63,15 @@ class JSONDatabase(Handler):
             if (complete):
                 break
         self._save()
-    def delete_translation_saved(self, token: str, record: TranslateRecord) -> None:
+    def delete_translation_saved(self, token: str, id : int) -> None:
         user = self.get_user({'token' : token})
-        while (True):
-            complete = True
-            for user_record in user.saved:
-                if (user_record == record):
-                    user.saved.remove(user_record)
-                    complete = False
-            if (complete):
-                break
+        user.history.pop(id)
+        # while (True):
+        #     complete = True
+        #     for user_record in user.saved:
+        #         if (user_record == record):
+        #             user.saved.remove(user_record)
+        #             complete = False
+        #     if (complete):
+        #         break
         self._save()

@@ -65,9 +65,9 @@ async def add_history(
 
 @app.delete('/history',tags=['History'],responses=model_not_found_resonse)
 async def delete_history(
-    data : TranslationRecordTokenized
+    data : TokenizedId
 ):
-    handler.delete_translation_history(data.token,data.record)
+    handler.delete_translation_history(data.token,data.id)
     return Response(status_code=200)
 
 @app.get('/saved',tags=['Saved'],responses=model_not_found_resonse)
@@ -85,9 +85,9 @@ async def add_saved(
 
 @app.delete('/saved',tags=['Saved'],responses=model_not_found_resonse)
 async def delete_saved(
-    data : TranslationRecordTokenized
+    data : TokenizedId
 ):
-    handler.delete_translation_saved(data.token,data.record)
+    handler.delete_translation_saved(data.token,data.id)
     return Response(status_code=200)
     
 

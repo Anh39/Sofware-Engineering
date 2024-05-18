@@ -34,8 +34,7 @@ export const del = async (path) => {
             "Token" : getCookie('token')
         }
     });
-    const result = await response.json();
-    return result;
+    return response;
 }
 
 export const patch = async (path, option) => {
@@ -48,6 +47,5 @@ export const patch = async (path, option) => {
         },
         body: JSON.stringify(option)
     });
-    const result = await response.json();
-    return result;
+    return response;
 }

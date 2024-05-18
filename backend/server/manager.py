@@ -4,7 +4,7 @@ import uuid
 from enum import Enum
 import hashlib
 from typing import Dict
-from backend.server.model import RegistedUser,ChangePasswordRequest,Guest,TranslateRecord,LoginRequest,RegisterRequest,TranslationRequest,TranslationResponse
+from backend.server.model import RegistedUser,ChangePasswordRequest,Guest,TranslateRecord,LoginRequest,RegisterRequest,TranslationRequest,TranslationResponse,Id
 from backend.database.api import DatabaseAPI
 from fastapi import HTTPException
 import asyncio
@@ -77,8 +77,8 @@ class UserController:
         await self.database_api.history(action='add',token=token,record=record)
     async def save_record(self,token : str,record : TranslateRecord) -> None:
         await self.database_api.saved(action='add',token=token,record=record)
-    async def delete_record(self,token : str,record : TranslateRecord) -> None:
-        await self.database_api.saved(action='delete',token=token,record=record)
+    async def delete_record(self,token : str,id : int) -> None:
+        await self.database_api.saved(action='delete',token=token,id = id)
     async def get_user(self,token : str) :
         return await self._get_user_by_token(token)
     async def change_password(self,token : str,request : ChangePasswordRequest) -> bool:
