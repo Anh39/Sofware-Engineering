@@ -1,7 +1,6 @@
 import { Button, Col, Flex, Row, Select } from "antd";
 import { SwapOutlined, SoundOutlined, CopyOutlined, StarOutlined, StarFilled } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import "../../language";
 import { language } from "../../language";
 import TextArea from "antd/es/input/TextArea";
