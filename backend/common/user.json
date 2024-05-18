@@ -86,7 +86,15 @@
         "email": "abc@gmail.com",
         "password": "123",
         "username": "abc",
-        "saved": []
+        "saved": [
+            {
+                "to_content": "www",
+                "engine_used": "Google",
+                "from_language": "string",
+                "to_language": "string",
+                "from_content": "string"
+            }
+        ]
     },
     {
         "type_name": "Guest",
@@ -172,119 +180,6 @@
     {
         "type_name": "Guest",
         "token": "47c41d2c-fb6b-4538-8fdd-fbd428e4a704",
-        "history": []
-    },
-    {
-        "type_name": "Guest",
-        "token": "34317615-adce-4370-9c3a-847018974ddb",
-        "history": [
-            {
-                "to_content": "l",
-                "engine_used": "mymemory",
-                "from_language": "en-GB",
-                "to_language": "vi-VN",
-                "from_content": "l"
-            },
-            {
-                "to_content": "la",
-                "engine_used": "mymemory",
-                "from_language": "en-GB",
-                "to_language": "vi-VN",
-                "from_content": "la"
-            },
-            {
-                "to_content": "v\u00f2ng nguy\u1ec7t qu\u1ebf",
-                "engine_used": "mymemory",
-                "from_language": "en-GB",
-                "to_language": "vi-VN",
-                "from_content": "laug"
-            },
-            {
-                "to_content": "c\u01b0\u1eddi; ti\u1ebfng c\u01b0\u1eddi",
-                "engine_used": "mymemory",
-                "from_language": "en-GB",
-                "to_language": "vi-VN",
-                "from_content": "laugh"
-            },
-            {
-                "to_content": "c\u01b0\u1eddi; ti\u1ebfng c\u01b0\u1eddi",
-                "engine_used": "mymemory",
-                "from_language": "en-GB",
-                "to_language": "vi-VN",
-                "from_content": "laugh"
-            },
-            {
-                "to_content": "Lau.",
-                "engine_used": "mymemory",
-                "from_language": "en-GB",
-                "to_language": "vi-VN",
-                "from_content": "lau"
-            },
-            {
-                "to_content": "c\u01b0\u1eddi; ti\u1ebfng c\u01b0\u1eddi",
-                "engine_used": "mymemory",
-                "from_language": "en-GB",
-                "to_language": "vi-VN",
-                "from_content": "laugh"
-            },
-            {
-                "to_content": "c\u01b0\u1eddi; ti\u1ebfng c\u01b0\u1eddi",
-                "engine_used": "mymemory",
-                "from_language": "en-GB",
-                "to_language": "vi-VN",
-                "from_content": "laugh"
-            },
-            {
-                "to_content": "c\u01b0\u1eddi; ti\u1ebfng c\u01b0\u1eddi",
-                "engine_used": "mymemory",
-                "from_language": "en-GB",
-                "to_language": "vi-VN",
-                "from_content": "laugh"
-            },
-            {
-                "to_content": "c\u01b0\u1eddi; ti\u1ebfng c\u01b0\u1eddi",
-                "engine_used": "mymemory",
-                "from_language": "en-GB",
-                "to_language": "vi-VN",
-                "from_content": "laugh"
-            },
-            {
-                "to_content": "c\u01b0\u1eddi; ti\u1ebfng c\u01b0\u1eddi",
-                "engine_used": "mymemory",
-                "from_language": "en-GB",
-                "to_language": "vi-VN",
-                "from_content": "laugh"
-            }
-        ]
-    },
-    {
-        "type_name": "Guest",
-        "token": "e7e45d5b-bb07-4cd1-8925-a8ca7933770a",
-        "history": []
-    },
-    {
-        "type_name": "Guest",
-        "token": "011dc8df-c1fa-4eaa-a5d0-ccc14d49a146",
-        "history": []
-    },
-    {
-        "type_name": "Guest",
-        "token": "da4fd9e7-76e0-4bba-b910-d92655000bb9",
-        "history": []
-    },
-    {
-        "type_name": "Guest",
-        "token": "1b6f089d-8646-4abd-b9fc-e8ba48fb1a91",
-        "history": []
-    },
-    {
-        "type_name": "Guest",
-        "token": "48a87ea6-0e6d-4405-8e06-d8f994ce4d11",
-        "history": []
-    },
-    {
-        "type_name": "Guest",
-        "token": "da43a256-df2f-4b98-8ebf-275749ca48db",
         "history": []
     }
 ]
