@@ -40,13 +40,6 @@ function Home() {
     const [isSaved, setIsSaved] = useState(false);
 
     const translateText = async (text) => {
-        // const apiUrl = `https://api.mymemory.translated.net/get?q=${text}&langpair=${FromLang.label}|${ToLang.label}`;
-        // const response = await fetch(apiUrl);
-        // const data = await response.json();
-        // if (data.responseData) {
-        //     setTranslatedText(data.responseData.translatedText);
-        // }
-        // const apiUrl = `https://api.mymemory.translated.net/get?q=${text}&langpair=${FromLang.label}|${ToLang.label}`;
         let mapping = {
             'English': 'en-GB',
             'Vietnamese': 'vi-VN'

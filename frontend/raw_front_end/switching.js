@@ -15,7 +15,7 @@ function show_user_container() {
 function hide_user() {
     let user = document.getElementById('user');
     user.style.display = 'none';
-    hide_user_container()
+    hide_user_container();
     user_visisble = false;
 }
 function show_user() {
@@ -55,6 +55,7 @@ user_button.addEventListener('click', () => {
 hide_user();
 let logout_button = document.getElementById('logout_button');
 logout_button.addEventListener('click', () => {
+    hide_login();
     show_login_button();
     hide_user();
 })
