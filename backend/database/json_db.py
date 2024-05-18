@@ -36,6 +36,11 @@ class JSONDatabase(Handler):
                 if (user.username == username):
                     return user
         return None
+    def update_user(self, token: str, user: Guest | RegistedUser):
+        for i in range(len(self.container)):
+            if (self.container[i].token == token):
+                self.container[i] = user
+        self._save()
     def add_translation_history(self, user_token: str, data: TranslateRecord) -> None:
         self.get_user({'token' : user_token}).add_history(data)
         self._save()

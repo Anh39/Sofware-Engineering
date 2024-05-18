@@ -1,3 +1,4 @@
+import asyncio
 from fastapi import FastAPI,Request,Response,HTTPException,Query,Cookie,Header
 from backend.server.model import *
 from backend.common import common
@@ -86,7 +87,18 @@ async def users_register(
     else:
         response = LoginResponse(success=False,token='')
         return response
-    
+@app.post('/change_password',tags=['Authentication'])
+async def change_password(
+    data : ChangePasswordRequest,
+    token : str = GetToken(None)
+):
+    validate = await user_manger.validate(token)
+    if (validate):
+        result = await user_manger.change_password(token,data)
+        if (result):
+            return Response(status_code=200)
+    raise HTTPException(status_code=401)
+
 @app.get('/history',tags=['Record'],responses=unauthorized_resonse)
 async def get_history(
     start_from : int = Query(gt=-1,lt=1000),
@@ -144,23 +156,17 @@ async def delete_record(
         raise HTTPException(status_code=401)
 
 @app.post('/translate/text',tags=['Translate'],responses=unauthorized_resonse)
-async def translate_test(
+async def translate_text(
     data : TranslationRequest,
     token : str = GetToken(None)
 ) -> TranslationResponse:
     validation = await user_manger.guest_validate(token)
     if (validation):
-        result = await translate_api.translate_test(data)
+        task = asyncio.create_task(translate_api.translate_test(data))
+        user_manger.add_job(task,token,data)
+        result = await task
         if (isinstance(result,HTTPException)):
             raise result
-        record = TranslateRecord(
-            from_content=data.from_content,
-            to_content=result.to_content,
-            from_language=data.from_language,
-            to_language=data.to_language,
-            engine_used=result.engine_used
-        )
-        await user_manger.add_history(token,record)
         response = result
         return response
     else:
