@@ -2,10 +2,14 @@ import { Button, Drawer, Dropdown } from "antd";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getHistory, getSaved } from "../../Services/userService";
+import { language } from "../../language";
+import { ArrowRightOutlined } from "@ant-design/icons";
+import "./drawer.css";
 
 function Personal() {
     const [opensHistory, setOpenHistory] = useState(false);
     const [opensSaved, setOpenSaved] = useState(false);
+    const [history, setHistory] = useState([]);
 
     const onHistory = () => {
         setOpenHistory(true);
@@ -48,21 +52,20 @@ function Personal() {
             if (response.ok) {
                 const data = await response.json();
                 console.log(data);
-            }
-
-            const resSaved = await getSaved();
-            if (resSaved.ok) {
-                const data = await resSaved.json();
-                console.log(data);
+                setHistory(data);
             }
         }
         fetchAPI();
     }, [])
 
+    history.map((value, index) => {
+        console.log(value);
+    })
+
     return (
         <>
             <Dropdown
-                menu={{items}}
+                menu={{ items }}
                 trigger={['click']}
             >
                 <Button>
@@ -71,10 +74,19 @@ function Personal() {
             </Dropdown>
 
             <Drawer title="lịch sử dịch" open={opensHistory} onClose={closeHistory} >
-                <div>Bản dịch đã lưu</div>
-                {
-                    // bản dịch tại đây
-                }
+                {history.map((value, index) => (
+                    <div key={index} className="history">
+                        <div>
+                            {language[value.from_language]} <ArrowRightOutlined /> {language[value.to_language]}
+                        </div>
+                        <div>
+                            {value.from_content}
+                        </div>
+                        <div>
+                            {value.to_content}
+                        </div>
+                    </div>
+                ))}
             </Drawer>
 
             <Drawer title="Bản dịch đã lưu" open={opensSaved} onClose={closeSaved} >

@@ -1,0 +1,9 @@
+.history {
+    padding: 5px;
+    padding-left: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.ant-drawer-body {
+    padding: 0 !important;
+}
