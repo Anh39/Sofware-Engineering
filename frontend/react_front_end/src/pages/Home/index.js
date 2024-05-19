@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import "../../language";
 import { language } from "../../language";
 import TextArea from "antd/es/input/TextArea";
-import { getCookie} from "../../helpers/cookie";
-import { translateTextServer,  saveRecord } from "../../Services/userService";
+import { getCookie } from "../../helpers/cookie";
+import { translateTextServer, saveRecord } from "../../Services/userService";
 
 
 function Home() {
@@ -19,10 +19,35 @@ function Home() {
     const [inputText, setInputText] = useState('');
     const [translatedText, setTranslatedText] = useState('');
 
+    const [api, setApi] = useState('google');
+
     const languageOptions = Object.keys(language).map((key) => ({
         label: language[key],
         value: key,
     }));
+
+    const typeApi = [
+        {
+            value: 'google',
+            label: 'Google'
+        },
+        {
+            value: 'mymemory',
+            label: 'My Memory'
+        },
+        {
+            value: 'gpt3.5',
+            label: 'GPT 3.5'
+        },
+        {
+            value: 'gpt4',
+            label: 'GPT 4'
+        }
+    ];
+
+    const changeAPI = (value) => {
+        setApi(value);
+    }
 
     const translateText = async (text) => {
         let mapping = {
@@ -33,7 +58,7 @@ function Home() {
             from_language: mapping[FromLang.label],
             to_language: mapping[ToLang.label],
             from_content: text,
-            engine: 'auto'
+            engine: api
         }
         const response = await translateTextServer(options);
         if (response.ok) {
@@ -89,7 +114,7 @@ function Home() {
     const Save = async () => {
         const options = {
             to_content: translatedText,
-            engine_used: "google",
+            engine_used: api,
             from_language: FromLang.value,
             to_language: ToLang.value,
             from_content: inputText,
@@ -120,6 +145,17 @@ function Home() {
     return (
         <>
             {contextHolder}
+            <Flex className="trans__type" gap="large">
+                <Select
+                    defaultValue='google'
+                    options={typeApi}
+                    className="trans__type--button"
+                    style={{
+                        width: 120,
+                    }}
+                    onChange={changeAPI}
+                />
+            </Flex>
             <Flex justify="center">
                 <Select
                     onChange={handleChangeFromLang}
