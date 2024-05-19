@@ -11,4 +11,5 @@ pip install openai
 pip install tiktoken
 pip install fastapi
 pip install uvicorn
+pip install sqlalchemy
 playwright install
