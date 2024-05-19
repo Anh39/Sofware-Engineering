@@ -4,24 +4,9 @@ import { useEffect, useState } from "react";
 import "../../language";
 import { language } from "../../language";
 import TextArea from "antd/es/input/TextArea";
-import { getCookie, setCookie } from "../../helpers/cookie";
-import { translateTextServer, entry, saveRecord } from "../../Services/userService";
+import { getCookie} from "../../helpers/cookie";
+import { translateTextServer,  saveRecord } from "../../Services/userService";
 
-async function init() {
-    const response = await entry();
-    const data = await response.json();
-    if (data.success === true) {
-        // setCookie("id", data.id, 1);
-        // setCookie("username", data.username, 1);
-        // setCookie("email", data.email, 1);
-        setCookie("token", data.token, { path: '/' });
-        //document.cookie = `token=${data.token};path=/;`
-    } else {
-        console.log('Entry Error');
-    }
-}
-
-await init();
 
 function Home() {
     const token = getCookie("token");

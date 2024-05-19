@@ -86,8 +86,7 @@ class DatabaseAPI:
             if (action == 'get'):
                 async with self.session.get('/history',params={'token' : token}) as response:
                     if (response.status == 200):
-                        result = await response.json()
-                        records = json.loads(result)
+                        records = await response.json()
                         final_result = []
                         for record in records:
                             final_result.append(TranslateRecord.model_validate(record))
@@ -134,10 +133,9 @@ class DatabaseAPI:
                 'id' : id
             }
             if (action == 'get'):
-                async with self.session.get('/saved',params=json.dumps(data)) as response:
+                async with self.session.get('/saved',params={'token' : token}) as response:
                     if (response.status == 200):
-                        result = await response.json()
-                        records = json.loads(result)
+                        records = await response.json()
                         final_result = []
                         for record in records:
                             final_result.append(TranslateRecord.model_validate(record))

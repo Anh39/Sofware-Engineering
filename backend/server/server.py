@@ -74,13 +74,10 @@ async def users_login(
 
 @app.post('/register',tags=['Authentication'])
 async def users_register(
-    data : RegisterRequest
+    data : RegisterRequest,
+    token : str = GetToken(None)
 ) -> LoginResponse:
-    token = user_manger.add_user(
-        username=data.username,
-        password=data.password,
-        email=data.email
-    )
+    token = await user_manger.register(data)
     if (token != None):
         response = LoginResponse(success=True,token=token)
         return response
@@ -105,11 +102,10 @@ async def get_history(
     amount : int = Query(gt=-1,lt=1000),
     token : str = GetToken(None)
 ) -> list[TranslateRecord]:
-    validation = await user_manger.guest_validate(token)
+    validation = await user_manger.validate(token)
     if (validation):
-        user = await user_manger.get_user(token)
         request = GetRecordRequest(start_from=start_from,amount=amount)
-        result = user.get_history(request)
+        result = await user_manger.get_history(token,request)
         return result
     else:
         raise HTTPException(status_code=401)
@@ -122,9 +118,8 @@ async def get_saved(
 ) -> list[TranslateRecord]:
     validation = await user_manger.validate(token)
     if (validation):
-        user = await user_manger.get_user(token)
         request = GetRecordRequest(start_from=start_from,amount=amount)
-        result = user.get_saved(request)
+        result = await user_manger.get_record(token,request)
         return result
     else:
         raise HTTPException(status_code=401)
@@ -160,17 +155,17 @@ async def translate_text(
     data : TranslationRequest,
     token : str = GetToken(None)
 ) -> TranslationResponse:
-    validation = await user_manger.guest_validate(token)
-    if (validation):
-        task = asyncio.create_task(translate_api.translate_test(data))
-        user_manger.add_job(task,token,data)
-        result = await task
-        if (isinstance(result,HTTPException)):
-            raise result
-        response = result
-        return response
-    else:
-        raise HTTPException(status_code=401)
+    # validation = await user_manger.guest_validate(token)
+    # if (validation):
+    task = asyncio.create_task(translate_api.translate_test(data))
+    user_manger.add_job(task,token,data)
+    result = await task
+    if (isinstance(result,HTTPException)):
+        raise result
+    response = result
+    return response
+    # else:
+    #     raise HTTPException(status_code=401)
     
 app.add_event_handler('startup',init)    
 

@@ -17,7 +17,7 @@ class backend:
     history = join(path,'history.json')
 class database:
     path = join(_project_path,'database')
-    database = join(path,'translate_database.db')
+    database = join(path,'database.db')
 class common:
     path = join(_project_path,'backend','common')
     config = join(_project_path,'config.json')
