@@ -6,7 +6,7 @@ Thành viên nhóm:
 - [Dương Phương Hiểu](https://github.com/dphieu ) (22022659)
 - [Trần Đức Hùng](https://github.com/hungtran1210 )(22022639)
 ## Demo :
-- [Video cài đặt](https://drive.google.com/file/d/1WIr-7urEuMMDN_d2OlbAhgXLPukWQp8U/view?usp=drive_link)
+- [Video cài đặt](https://drive.google.com/file/d/1QytFzMNVR26aRc83ousliNuHffiZYEz4/view?usp=drive_link)
 - [Video demo](https://drive.google.com/file/d/1QytFzMNVR26aRc83ousliNuHffiZYEz4/view?usp=drive_link)
 - [Báo cáo] 
 ## Tính năng :
