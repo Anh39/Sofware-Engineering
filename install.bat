@@ -12,4 +12,5 @@ pip install tiktoken
 pip install fastapi
 pip install uvicorn
 pip install sqlalchemy
+pip install jwt
 playwright install
