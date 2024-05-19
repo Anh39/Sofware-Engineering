@@ -5,32 +5,27 @@ Thành viên nhóm:
 - [Vũ Đức Anh](https://github.com/Anh39 ) (22022514)
 - [Dương Phương Hiểu](https://github.com/dphieu ) (22022659)
 - [Trần Đức Hùng](https://github.com/hungtran1210 )(22022639)
+## Demo :
+- Video :
+- Báo cáo : 
 ## Tính năng :
-### Cơ bản :
-- Giao diện web
-- Dịch chữ từ nhiều ngôn ngữ sang cho nhau và ngược lại
-- Lưu lịch sử dịch
-- Có hệ thống tài khoản người dùng
-- Người dùng có thể lưu lại một số bản dịch
-### Nâng cao :
-- Hỗ trợ thêm nhiều ngôn ngữ hơn
-- Dịch tài liệu (docx,pdf,txt,json,csv)
-- Dịch từ âm thanh
-- Dịch nội dung trang web
-- Hệ thống quản lý tài nguyên cho người dùng trả phí/miễn phí
-- Cho phép người dùng sử dụng từ điển riêng
-- Cho phép người dùng sử dụng backend dịch khác như Google Translate, DeepL, ChatGPT, Gemini, ....
+- Giao diện web.
+- Dịch chữ từ nhiều ngôn ngữ sang cho nhau.
+- Cho phép người dùng đăng ký tài khoảng và đăng nhập vào hệ thống.
+- Lưu lịch sử dịch của người dùng.
+- Người dùng có thể lưu lại một số bản dịch.
+- Cho phép người dùng sử dụng backend dịch khác như Google Translate, Mymemory, ChatGPT (3.5 và 4).
 ## Công nghệ sử dụng:
-- Documentation : [aiohttp-apispec](https://pypi.org/project/aiohttp-apispec/)
-- Backend : python [aiohttp](https://docs.aiohttp.org/en/stable/ ), [MyMemory](https://mymemory.translated.net/), [Google Translate](https://translate.google.com/) thông qua [Playwright](https://playwright.dev/), [ChatGPT](https://platform.openai.com/docs/overview) thông qua [openai-python](https://github.com/openai/openai-python)
+- Backend : python [aiohttp](https://docs.aiohttp.org/en/stable/ ), [FastAPI](https://fastapi.tiangolo.com/)
+- Server dịch : [MyMemory](https://mymemory.translated.net/), [Google Translate](https://translate.google.com/) thông qua [Playwright](https://playwright.dev/), [ChatGPT](https://platform.openai.com/docs/overview) thông qua [openai-python](https://github.com/openai/openai-python)
 - Frontend: ReactJs, [ant.design](https://ant.design/)
-- Database
+- Database : [SQLAlchemy](https://www.sqlalchemy.org/)
 ## Đóng góp:
 - Server backend : [Vũ Đức Anh](https://github.com/Anh39)
-- Web frontend : [Dương Phương Hiểu](https://github.com/dphieu)
+- Web frontend, ReactServer : [Dương Phương Hiểu](https://github.com/dphieu)
 - Database : [Trần Đức Hùng](https://github.com/hungtran1210)
 ## Cài đặt
  - Chạy file install.bat
-   - Hoặc chạy file install.ipynb và thêm lệnh playwright install sử dụng command line/terminal/console
-   - Nếu dịch dùng ChatGPT cần thêm file apikey.json vào thư mục gốc chứa {"openai" : "api key của bạn"}
- - Chạy phần mềm bằng file main.py. trang web có thể truy cập bằng địa chỉ http://127.0.0.1:8080/
+   - Nếu dịch dùng ChatGPT cần thêm file apikey.json vào theo đường dẫn backend\common\apikey.json với nội dung {"openai" : "api key của bạn"}
+ - Chạy server bằng file main.py. trang web có thể truy cập bằng địa chỉ http://127.0.0.1:3000/
+ - Chạy frontend bằng lệnh npm start
