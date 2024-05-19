@@ -4,10 +4,12 @@ from backend.common import common
 import uvicorn
 from backend.database.json_db import JSONDatabase
 from backend.database.model import *
+from backend.database.database import DatabaseHandler
+import json
 
 app = FastAPI()
 
-handler = JSONDatabase()
+handler = DatabaseHandler()
 async def init():
     global handler
     handler.start()
@@ -52,9 +54,13 @@ async def delete_user(
 
 @app.get('/history',tags=['History'],responses=model_not_found_resonse)
 async def get_history(
-    data : Token
+    token : str
 ) -> list[TranslateRecord]:
-    return handler.get_translation_history(data.token)
+    results = handler.get_translation_history(token)
+    # final_results = []
+    # for result in results:
+    #     final_results.append(result.model_dump())
+    return results
 
 @app.post('/history',tags=['History'],responses=model_not_found_resonse)
 async def add_history(
@@ -72,9 +78,13 @@ async def delete_history(
 
 @app.get('/saved',tags=['Saved'],responses=model_not_found_resonse)
 async def get_saved(
-    data : Token
+    token : str
 ) -> list[TranslateRecord]:
-    return handler.get_translation_saved(data.token)
+    results = handler.get_translation_saved(token)
+    # final_results = []
+    # for result in results:
+    #     final_results.append(result.model_dump())
+    return results
 
 @app.post('/saved',tags=['Saved'],responses=model_not_found_resonse)
 async def add_saved(

@@ -4,7 +4,7 @@ import uuid
 from enum import Enum
 import hashlib
 from typing import Dict
-from backend.server.model import RegistedUser,ChangePasswordRequest,Guest,TranslateRecord,LoginRequest,RegisterRequest,TranslationRequest,TranslationResponse,Id
+from backend.server.model import *
 from backend.database.api import DatabaseAPI
 from fastapi import HTTPException
 import asyncio
@@ -45,12 +45,14 @@ class UserController:
         user = await self._get_user_by_username(request.username)
         if (isinstance(user,HTTPException)):
             raise HTTPException(status_code=404)
+        if (user == None):
+            return None
         if (user.password == request.password):
             if (self.DYNAMIC_TOKEN):
                 await self._update_user_token(user,self._generate_token())
             return user.token
         return None
-    async def register(self,reqest : RegisterRequest,token : str) -> str | None:
+    async def register(self,reqest : RegisterRequest) -> str | None:
         user = await self._get_user_by_username(reqest.username)
         if (user == None):
             user = await self._get_user_by_email(reqest.email)
@@ -61,9 +63,6 @@ class UserController:
                     password = reqest.password,
                     username = reqest.username
                 )
-                if (token != None):
-                    user.history = await self._get_user_by_token(token)
-                    await self._delete_user(token)
                 await self._add_registerd_user(user)
                 return user.token
         return None
@@ -75,8 +74,20 @@ class UserController:
         return user != None
     async def add_history(self,token : str,record : TranslateRecord)-> RegistedUser | Guest:
         await self.database_api.history(action='add',token=token,record=record)
+    async def get_history(self,token : str,request : GetRecordRequest) -> None:
+        result = await self.database_api.history(action='get',token=token)
+        try:
+            return result[request.start_from:request.start_from+request.amount]
+        except:
+            return []
     async def save_record(self,token : str,record : TranslateRecord) -> None:
         await self.database_api.saved(action='add',token=token,record=record)
+    async def get_record(self,token : str,request : GetRecordRequest) -> None:
+        result = await self.database_api.saved(action='get',token=token)
+        try:
+            return result[request.start_from:request.start_from+request.amount]
+        except:
+            return []
     async def delete_record(self,token : str,id : int) -> None:
         await self.database_api.saved(action='delete',token=token,id = id)
     async def get_user(self,token : str) :

@@ -65,6 +65,7 @@ class TranslationResponse(BaseModel):
     ) 
     
 class TranslateRecord(TranslationResponse):
+    id : int | None = None
     from_language : str = Field(
         min_length=2,
         max_length=8
@@ -92,14 +93,6 @@ class BaseUser(BaseModel):
         min_length=1
     )
     history : list[TranslateRecord] = []
-    def get_history(self,request : GetRecordRequest):
-        start_ = request.start_from
-        if (start_>len(self.history)):
-            return []
-        end_ = min(start_+request.amount,len(self.history))
-        return self.history[start_:end_]
-    def add_history(self,data : TranslateRecord):
-        self.history.append(data)
 class Id(BaseModel):
     id : int
 class Guest(BaseUser):
@@ -120,14 +113,6 @@ class RegistedUser(BaseUser):
         max_length = 50
     )
     saved : list[TranslateRecord] = []
-    def get_saved(self,request : GetRecordRequest):
-        start_ = request.start_from
-        if (start_>len(self.saved)):
-            return []
-        end_ = min(start_+request.amount,len(self.saved))
-        return self.saved[start_:end_]
-    def add_saved(self,data : TranslateRecord):
-        self.saved.append(data)
 
 # class OldUser:
 #     type_name = 'User'
