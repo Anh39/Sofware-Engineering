@@ -5,8 +5,9 @@
 
 | Version | Supported          |
 | ------- | ------------------ |
-| Test 0.0.0   | :white_check_mark: |
-| Test 0.0.1   | :x: |
+| Test 0.0.0   | :x: |
+| Stable v0.1.0   | :x: |
+| Final 1.0.0   | :white_check_mark: |
 
 ## Báo cáo lỗi:
 
