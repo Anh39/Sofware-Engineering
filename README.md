@@ -8,7 +8,7 @@ Thành viên nhóm:
 ## Demo :
 - [Video cài đặt](https://drive.google.com/file/d/1CH6dNydhVpRW1qZ1qv9234KWv69HjDRz/view?usp=drive_link)
 - [Video demo](https://drive.google.com/file/d/1QytFzMNVR26aRc83ousliNuHffiZYEz4/view?usp=drive_link)
-- [Báo cáo] 
+- [Báo cáo](https://drive.google.com/file/d/1gCxazamSuBEfgTAChkbrx4rBqhbyy40C/view?usp=drive_link)
 ## Tính năng :
 - Giao diện web.
 - Dịch chữ từ nhiều ngôn ngữ sang cho nhau.
