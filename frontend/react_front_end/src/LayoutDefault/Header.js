@@ -2,9 +2,10 @@ import { Button } from "antd";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Personal from "../components/Personal";
+import { getCookie } from "../helpers/cookie";
 
-function Header(props) {
-    const { token } = props;
+function Header() {
+    const token = getCookie("token");
     const isLogin = useSelector(state => state.loginReducer);
 
     console.log(isLogin);

@@ -47,31 +47,32 @@ function Personal() {
         }
     ];
 
-    const DeleteSave = async (id) => {
-        console.log(id);
-        const response = await DeleteSaved(id);
+    const fetchAPI = async () => {
+        const response = await getHistory();
         if (response.ok) {
-            setSavedText(savedText.filter(item => item.id === id));
+            const data = await response.json();
+            setHistory(data.reverse());
+        }
+
+        const responseSaved = await getSaved();
+        if (responseSaved.ok) {
+            const dataSaved = await responseSaved.json();
+            console.log(dataSaved);
+            setSavedText(dataSaved);
+        }
+    }
+
+    const DeleteSave = async (value) => {
+        console.log(value);
+        const response = await DeleteSaved(value.id);
+        if (response.ok) {
+            fetchAPI();
         }
     }
 
     useEffect(() => {
-        const fetchAPI = async () => {
-            const response = await getHistory();
-            if (response.ok) {
-                const data = await response.json();
-                setHistory(data);
-            }
-
-            const responseSaved = await getSaved();
-            if (responseSaved.ok) {
-                const dataSaved = await responseSaved.json();
-                console.log(dataSaved);
-                setSavedText(dataSaved);
-            }
-        }
         fetchAPI();
-    }, [])
+    }, []);
 
     return (
         <>
@@ -104,7 +105,7 @@ function Personal() {
                             <div>{value.from_content}</div>
                             <div>{value.to_content}</div>
                         </div>
-                        <div className="star" onClick={() => DeleteSave(index)}>
+                        <div className="star" onClick={() => DeleteSave(value)}>
                             <StarFilled />
                         </div>
                     </div>
