@@ -61,7 +61,7 @@ class TranslationResponse(BaseModel):
     engine_used : str = Field(
         min_length=1,
         max_length=500,
-        default='Google'
+        default='google'
     ) 
     
 class TranslateRecord(TranslationResponse):
